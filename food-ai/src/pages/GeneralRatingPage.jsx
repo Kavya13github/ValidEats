@@ -1,7 +1,6 @@
 // src/pages/GeneralRatingPage.jsx
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import SectionHeading from '../components/SectionHeading';
 import SearchBar from '../components/SearchBar';
 import SelectField from '../components/SelectField';
 import Button from '../components/Button';
@@ -9,10 +8,13 @@ import ResultCard from '../components/ResultCard';
 import ProductCard from '../components/ProductCard';
 import AlertBox from '../components/AlertBox';
 import LoaderSpinner from '../components/LoaderSpinner';
+import FloatingOrbs from '../components/FloatingOrbs';
+import { useToast } from '../components/Toast';
 import { products, ageGroups } from '../data/products';
 import { fetchGeneralRating } from '../utils/api';
 
 const GeneralRatingPage = () => {
+  const toast = useToast();
   const [selected, setSelected] = useState(null);
   const [ageGroup, setAgeGroup] = useState('');
   const [rating,   setRating]   = useState(null);
@@ -20,62 +22,68 @@ const GeneralRatingPage = () => {
   const [error,    setError]    = useState('');
   const [query,    setQuery]    = useState('');
 
-  const pick = (p) => { setSelected(p); setQuery(p.name); setRating(null); setError(''); };
+  const pick = (p) => {
+    setSelected(p); setQuery(p.name);
+    setRating(null); setError('');
+    toast.show(`${p.emoji} ${p.name} selected`, 'info', 2000);
+  };
 
   const run = async () => {
     if (!selected) { setError('Please select a product first.'); return; }
-    if (!ageGroup) { setError('Please select an age group.'); return; }
+    if (!ageGroup) { setError('Please choose an age group.'); return; }
     setError(''); setLoading(true);
     try {
       const r = await fetchGeneralRating(selected.id, ageGroup);
       setRating(r);
-    } catch { setError('Something went wrong. Please try again.'); }
+      const status = r.stars >= 4 ? 'success' : r.stars >= 2.5 ? 'warning' : 'error';
+      toast.show(`Rating ready: ${r.stars}/5 ★ for ${selected.name}`, status);
+    } catch { setError('Something went wrong. Please retry.'); toast.show('Analysis failed — please try again', 'error'); }
     finally  { setLoading(false); }
   };
 
+  const quickNames = ['Lays', 'Maggi', 'Oreo', 'Coca Cola', 'Kurkure'];
+
   return (
-    <div className="min-h-screen pt-24 pb-16">
-      <div className="max-w-6xl mx-auto px-4 md:px-8">
+    <div className="relative min-h-screen page-wrap overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, #0D1020 0%, #080B14 60%, #0F0C1F 100%)' }}>
+      <FloatingOrbs variant="scan" />
+      <div className="line-grid absolute inset-0 opacity-40 pointer-events-none" />
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 pt-24 pb-16">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <SectionHeading
-            label="General Rating"
-            title="How healthy is this food?"
-            subtitle="Select a product and an age group. Get a verified star rating with expert health explanation."
-            align="left"
-          />
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-10">
+          <p className="label-sm mb-3">General Rating</p>
+          <h1 className="serif text-[clamp(2rem,5vw,3.2rem)] font-black text-white mb-3">How healthy is this food?</h1>
+          <p className="text-muted text-lg max-w-xl">Select a product and age group to get a verified star rating with expert health explanation.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* Left panel */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-            className="lg:col-span-2 space-y-5"
-          >
+          {/* ── Left panel ── */}
+          <motion.div initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1, duration: 0.6 }}
+            className="lg:col-span-2 space-y-4">
+
             {/* Step 1 */}
-            <div className="premium-card p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="w-6 h-6 rounded-full bg-gold text-charcoal-900 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
-                <span className="text-sm font-semibold text-gray-300">Select a Product</span>
+            <div className="card-static p-6 rounded-3xl">
+              <div className="flex items-center gap-3 mb-5">
+                <span className="step-num">1</span>
+                <span className="text-slate-200 font-semibold">Choose a Product</span>
               </div>
-              <SearchBar onSelect={pick} value={query} onChange={setQuery} placeholder="Search product..." />
-              {/* Quick picks */}
+              <SearchBar onSelect={pick} value={query} onChange={setQuery} placeholder="Type to search..." />
               <div className="mt-4">
-                <p className="text-charcoal-500 text-xs uppercase tracking-wider mb-2 font-medium">Quick Select</p>
+                <p className="text-slate-600 text-[11px] uppercase tracking-wider font-semibold mb-2.5">Quick picks</p>
                 <div className="flex flex-wrap gap-2">
-                  {['Lays', 'Maggi', 'Oreo', 'Coca Cola', 'Kurkure'].map((name) => {
+                  {quickNames.map((name) => {
                     const p = products.find((pr) => pr.name.toLowerCase().includes(name.toLowerCase()));
                     return p ? (
-                      <button key={name} onClick={() => pick(p)}
-                        className={`text-xs px-3 py-1.5 rounded-lg border transition-all font-medium
+                      <motion.button
+                        key={name} onClick={() => pick(p)}
+                        whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}
+                        className={`text-xs px-3.5 py-1.5 rounded-xl border font-medium transition-all duration-200
                           ${selected?.id === p.id
-                            ? 'border-gold/50 bg-gold/10 text-gold'
-                            : 'border-charcoal-700 bg-charcoal-800 text-charcoal-300 hover:border-gold/30 hover:text-gray-200'
-                          }`}>
+                            ? 'border-gold/50 bg-gold/15 text-gold shadow-gold-sm'
+                            : 'border-white/10 bg-white/5 text-slate-400 hover:border-gold/30 hover:text-slate-200'}`}>
                         {p.emoji} {name}
-                      </button>
+                      </motion.button>
                     ) : null;
                   })}
                 </div>
@@ -83,88 +91,86 @@ const GeneralRatingPage = () => {
             </div>
 
             {/* Step 2 */}
-            <div className="premium-card p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="w-6 h-6 rounded-full bg-gold text-charcoal-900 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
-                <span className="text-sm font-semibold text-gray-300">Select Age Group</span>
+            <div className="card-static p-6 rounded-3xl">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="step-num">2</span>
+                <span className="text-slate-200 font-semibold">Select Age Group</span>
               </div>
-              <SelectField
-                name="ageGroup"
-                value={ageGroup}
-                onChange={(e) => setAgeGroup(e.target.value)}
-                options={ageGroups}
-                placeholder="Choose age group..."
-                helper="Nutritional needs vary significantly across age groups."
-              />
+              <SelectField name="ageGroup" value={ageGroup} onChange={(e) => setAgeGroup(e.target.value)}
+                options={ageGroups} placeholder="Choose age group..."
+                helper="Nutritional needs vary across age groups." />
             </div>
 
             {/* Selected indicator */}
-            {selected && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-3 px-4 py-3 bg-gold/5 border border-gold/20 rounded-xl">
-                <span className="text-2xl">{selected.emoji}</span>
-                <div>
-                  <p className="text-charcoal-400 text-xs">Selected product</p>
-                  <p className="text-gray-200 font-semibold text-sm">{selected.name}</p>
-                </div>
+            <AnimatePresence>
+              {selected && (
+                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+                  className="flex items-center gap-3 px-4 py-3.5 bg-gold/8 border border-gold/20 rounded-2xl">
+                  <span className="text-2xl">{selected.emoji}</span>
+                  <div className="flex-1">
+                    <p className="text-slate-500 text-xs">Ready to analyse</p>
+                    <p className="text-white font-bold text-sm">{selected.name}</p>
+                  </div>
+                  <span className="text-gold text-xl">★</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {error && (
+              <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
+                <AlertBox type="error" message={error} onClose={() => setError('')} />
               </motion.div>
             )}
 
-            {error && <AlertBox type="error" message={error} onClose={() => setError('')} />}
-
-            <Button onClick={run} loading={loading} fullWidth size="lg" icon="★" disabled={!selected || !ageGroup}>
-              Get Rating
+            <Button onClick={run} loading={loading} fullWidth size="lg" icon="⭐" disabled={!selected || !ageGroup}>
+              {loading ? 'Analysing...' : 'Get Rating'}
             </Button>
           </motion.div>
 
-          {/* Right panel */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="lg:col-span-3 space-y-6"
-          >
+          {/* ── Right panel ── */}
+          <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2, duration: 0.6 }}
+            className="lg:col-span-3 space-y-6">
             <AnimatePresence mode="wait">
+
               {loading && (
-                <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                  <div className="premium-card py-16 text-center">
-                    <LoaderSpinner label="Analyzing nutritional data..." size="lg" />
-                    <div className="mt-6 space-y-1.5">
-                      {['Checking ingredients...', 'Applying age-based factors...', 'Generating health score...'].map((s, i) => (
-                        <motion.p key={s} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                          transition={{ delay: i * 0.5 }}
-                          className="text-charcoal-500 text-xs">
-                          {s}
-                        </motion.p>
-                      ))}
-                    </div>
+                <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="card rounded-3xl py-16 text-center">
+                  <LoaderSpinner label="Analysing nutritional data..." size="lg" />
+                  <div className="mt-8 space-y-2">
+                    {['Checking ingredient safety...', 'Applying age-based thresholds...', 'Generating your health score...'].map((s, i) => (
+                      <motion.p key={s} initial={{ opacity: 0 }} animate={{ opacity: 0.7 }} transition={{ delay: i * 0.6 }}
+                        className="text-slate-600 text-sm">{s}</motion.p>
+                    ))}
                   </div>
                 </motion.div>
               )}
 
               {!loading && rating && selected && (
-                <motion.div key="result" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+                <motion.div key="result" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                   <ResultCard product={selected} rating={rating} />
                 </motion.div>
               )}
 
               {!loading && !rating && (
-                <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                  <div className="premium-card py-16 text-center border-dashed border-charcoal-700">
-                    <p className="text-4xl mb-4">★</p>
-                    <p className="text-gray-400 font-medium text-sm">Ready to rate</p>
-                    <p className="text-charcoal-500 text-xs mt-1">Select a product and age group, then click "Get Rating"</p>
-                  </div>
+                <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                  className="card rounded-3xl py-20 text-center border-dashed"
+                  style={{ borderColor: 'rgba(212,175,55,0.15)' }}>
+                  <motion.span animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity }}
+                    className="text-6xl block mb-5">⭐</motion.span>
+                  <p className="text-slate-300 font-bold text-lg mb-2">Rating ready to launch</p>
+                  <p className="text-slate-600 text-sm">Pick a product + age group, then hit Get Rating</p>
                 </motion.div>
               )}
             </AnimatePresence>
 
             {/* Product browser */}
             <div>
-              <p className="text-charcoal-400 text-xs uppercase tracking-wider font-medium mb-4">Browse Products</p>
+              <p className="text-slate-600 text-xs uppercase tracking-wider font-semibold mb-4">Browse Products</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {products.slice(0, 6).map((p) => (
-                  <ProductCard key={p.id} product={p} onClick={pick} selected={selected?.id === p.id} />
+                {products.slice(0, 6).map((p, i) => (
+                  <motion.div key={p.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}>
+                    <ProductCard product={p} onClick={pick} selected={selected?.id === p.id} />
+                  </motion.div>
                 ))}
               </div>
             </div>

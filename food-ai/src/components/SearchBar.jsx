@@ -1,14 +1,14 @@
 // src/components/SearchBar.jsx
 import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { products } from '../data/products';
 
-const SearchBar = ({ onSelect, placeholder = 'Search a product...', value: ext, onChange: extOnChange, className = '' }) => {
-  const [query,       setQuery]       = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-  const [open,        setOpen]        = useState(false);
+const SearchBar = ({ onSelect, value, onChange, placeholder = 'Search product...' }) => {
+  const [query, setQuery] = useState(value || '');
+  const [open, setOpen]   = useState(false);
   const ref = useRef(null);
 
-  const active = ext !== undefined ? ext : query;
+  useEffect(() => { if (value !== undefined) setQuery(value); }, [value]);
 
   useEffect(() => {
     const fn = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
@@ -16,64 +16,69 @@ const SearchBar = ({ onSelect, placeholder = 'Search a product...', value: ext, 
     return () => document.removeEventListener('mousedown', fn);
   }, []);
 
-  const handle = (val) => {
-    if (extOnChange) extOnChange(val); else setQuery(val);
-    const f = val.trim().length > 0
-      ? products.filter((p) => p.name.toLowerCase().includes(val.toLowerCase()) || p.category.toLowerCase().includes(val.toLowerCase()))
-      : [];
-    setSuggestions(f);
-    setOpen(f.length > 0 || val.trim().length > 0);
-  };
+  const q = query.toLowerCase();
+  const filtered = q.length
+    ? products.filter((p) => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || p.category.toLowerCase().includes(q))
+    : products.slice(0, 5);
 
   const pick = (p) => {
-    if (extOnChange) extOnChange(p.name); else setQuery(p.name);
-    setSuggestions([]); setOpen(false);
+    setQuery(p.name); setOpen(false);
     if (onSelect) onSelect(p);
   };
 
   return (
-    <div ref={ref} className={`relative ${className}`}>
+    <div ref={ref} className="relative">
       <div className="relative">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gold/60 text-sm">🔍</span>
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 text-base pointer-events-none">🔍</span>
         <input
           type="text"
-          value={active}
-          onChange={(e) => handle(e.target.value)}
+          value={query}
+          onChange={(e) => { setQuery(e.target.value); setOpen(true); if (onChange) onChange(e.target.value); }}
+          onFocus={() => setOpen(true)}
           placeholder={placeholder}
-          onFocus={() => suggestions.length > 0 && setOpen(true)}
-          className="premium-input pl-11 py-4 rounded-xl text-sm"
+          className="field pl-11 pr-10"
         />
-        {active && (
-          <button
-            onClick={() => { if (extOnChange) extOnChange(''); else setQuery(''); setSuggestions([]); setOpen(false); }}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-charcoal-400 hover:text-white transition-colors text-sm"
-          >✕</button>
+        {query && (
+          <button onClick={() => { setQuery(''); setOpen(false); if (onChange) onChange(''); }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center text-slate-600 hover:text-white hover:bg-white/10 transition-all text-xs">
+            ✕
+          </button>
         )}
       </div>
 
-      {open && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-charcoal-900 border border-charcoal-700 rounded-xl overflow-hidden z-50 shadow-elegant">
-          {suggestions.length > 0 ? suggestions.slice(0, 6).map((p) => (
-            <button
-              key={p.id}
-              onClick={() => pick(p)}
-              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-charcoal-800 transition-colors text-left border-b border-charcoal-800 last:border-0"
-            >
-              <span className="text-xl w-8 flex-shrink-0">{p.emoji}</span>
-              <div className="flex-1 min-w-0">
-                <p className="text-gray-200 text-sm font-medium truncate">{p.name}</p>
-                <p className="text-charcoal-400 text-xs">{p.brand} · {p.category}</p>
-              </div>
-              <span className="text-gold/50 text-xs flex-shrink-0">Select →</span>
-            </button>
-          )) : (
-            <div className="px-4 py-5 text-center">
-              <p className="text-charcoal-400 text-sm">No results for "{active}"</p>
-              <p className="text-charcoal-600 text-xs mt-1">Try: Lays, Maggi, Oreo...</p>
+      <AnimatePresence>
+        {open && filtered.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="absolute z-50 top-full mt-2 left-0 right-0 rounded-2xl border border-gold/15
+              bg-brand-card/95 backdrop-blur-xl shadow-popup overflow-hidden"
+          >
+            <div className="max-h-64 overflow-y-auto p-1.5">
+              {filtered.slice(0, 8).map((p) => (
+                <motion.button
+                  key={p.id}
+                  onClick={() => pick(p)}
+                  whileHover={{ x: 4 }}
+                  className="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-left text-sm
+                    text-slate-300 hover:bg-gold/8 hover:text-white transition-all duration-150"
+                >
+                  <span className="text-xl w-7 text-center">{p.emoji}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold truncate text-[13px]">{p.name}</p>
+                    <p className="text-slate-600 text-xs mt-0.5">{p.brand} · {p.category}</p>
+                  </div>
+                </motion.button>
+              ))}
             </div>
-          )}
-        </div>
-      )}
+            {q && filtered.length === 0 && (
+              <div className="p-4 text-center text-sm text-slate-600">No results matching "{query}"</div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

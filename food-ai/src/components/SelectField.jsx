@@ -1,28 +1,30 @@
 // src/components/SelectField.jsx
 import React from 'react';
 
-const SelectField = ({ label, name, value, onChange, options = [], placeholder = 'Select...', helper, error, required, icon, className = '' }) => (
-  <div className={`flex flex-col gap-1.5 ${className}`}>
+const SelectField = ({ label, name, value, onChange, options = [], placeholder, error, helper, required, className = '' }) => (
+  <div className={className}>
     {label && (
-      <label htmlFor={name} className="text-xs font-medium text-gray-400 tracking-wide flex items-center gap-1">
-        {label}{required && <span className="text-risk ml-0.5">*</span>}
+      <label htmlFor={name} className="block text-slate-300 text-sm font-semibold mb-1.5">
+        {label}
+        {required && <span className="text-risk ml-0.5">*</span>}
       </label>
     )}
-    <div className="relative">
-      {icon && <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-charcoal-400 text-sm pointer-events-none z-10">{icon}</span>}
-      <select
-        id={name} name={name} value={value} onChange={onChange} required={required}
-        className={`premium-input appearance-none cursor-pointer ${icon ? 'pl-10' : ''} ${error ? '!border-risk/50' : ''}`}
-      >
-        <option value="" disabled className="bg-charcoal-800">{placeholder}</option>
-        {options.map((o) => (
-          <option key={o.value} value={o.value} className="bg-charcoal-800">{o.label}</option>
-        ))}
-      </select>
-      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-charcoal-400 pointer-events-none text-xs">▾</span>
-    </div>
-    {helper && !error && <p className="text-charcoal-400 text-xs">{helper}</p>}
-    {error && <p className="text-risk text-xs flex items-center gap-1"><span>⚠</span>{error}</p>}
+    <select
+      id={name}
+      name={name}
+      value={value}
+      onChange={onChange}
+      className={`field appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%226%22%20viewBox%3D%220%200%2012%206%22%3E%3Cpath%20d%3D%22M0%200l6%206%206-6%22%20fill%3D%22%23D4AF37%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_1rem_center]
+        ${!value ? '!text-slate-500' : ''}
+        ${error ? '!border-risk/50 focus:!border-risk/70' : ''}`}
+    >
+      <option value="" disabled>{placeholder || 'Select...'}</option>
+      {options.map((opt) => (
+        <option key={opt.value} value={opt.value} className="bg-brand-bg text-slate-200">{opt.label}</option>
+      ))}
+    </select>
+    {error  && <p className="text-risk text-xs mt-1 font-medium">{error}</p>}
+    {helper && !error && <p className="text-slate-600 text-xs mt-1">{helper}</p>}
   </div>
 );
 
