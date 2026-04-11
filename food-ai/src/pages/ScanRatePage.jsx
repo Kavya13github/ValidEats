@@ -1,32 +1,31 @@
 // src/pages/ScanRatePage.jsx
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import GlassCard from '../components/GlassCard';
+import SectionHeading from '../components/SectionHeading';
 import ScanUploadBox from '../components/ScanUploadBox';
-import ScanFrame from '../components/ScanFrame';
-import NeonButton from '../components/NeonButton';
-import HealthBadge from '../components/HealthBadge';
+import Button from '../components/Button';
 import RatingStars from '../components/RatingStars';
+import HealthBadge from '../components/HealthBadge';
 import NutritionChip from '../components/NutritionChip';
 import AlertBox from '../components/AlertBox';
+import LoaderSpinner from '../components/LoaderSpinner';
 import { scanImage } from '../utils/api';
 import { scanStages } from '../data/scanResults';
 
 const ScanRatePage = () => {
-  const [file,    setFile]    = useState(null);
-  const [state,   setState]   = useState('idle');   // idle | scanning | done | error
-  const [stage,   setStage]   = useState(0);
-  const [result,  setResult]  = useState(null);
+  const [file,   setFile]  = useState(null);
+  const [state,  setState] = useState('idle');   // idle | scanning | done | error
+  const [stage,  setStage] = useState(0);
+  const [result, setResult] = useState(null);
 
   const runScan = async () => {
     if (!file) return;
     setState('scanning'); setStage(0);
 
-    // Animate through stages
     const animPromise = (async () => {
       for (let i = 0; i < scanStages.length; i++) {
         setStage(i);
-        await new Promise(r => setTimeout(r, scanStages[i].duration));
+        await new Promise((r) => setTimeout(r, scanStages[i].duration));
       }
     })();
 
@@ -34,168 +33,151 @@ const ScanRatePage = () => {
       const [r] = await Promise.all([scanImage(file), animPromise]);
       setResult(r);
       setState('done');
-    } catch {
-      setState('error');
-    }
+    } catch { setState('error'); }
   };
 
   const reset = () => { setFile(null); setResult(null); setState('idle'); setStage(0); };
 
   return (
     <div className="min-h-screen pt-24 pb-16">
-      <div className="max-w-6xl mx-auto px-4 md:px-8">
+      <div className="max-w-5xl mx-auto px-4 md:px-8">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="w-2 h-2 bg-safe rounded-full animate-pulse" />
-            <span className="hud-label">Module 03</span>
-            <span className="text-gray-700 font-mono text-xs">/ AI Scanner</span>
-            <span className="ml-2 text-xs font-mono bg-neon-purple/20 text-neon-purple border border-neon-purple/30 px-2 py-0.5 rounded">BETA</span>
-          </div>
-          <h1 className="text-3xl md:text-5xl font-black text-white leading-tight">
-            AI <span className="neon-text-green">Scanner</span>
-          </h1>
-          <p className="text-gray-500 font-mono text-sm mt-3 max-w-xl">
-            Upload a food packet image. The AI reads the label, extracts nutrients, and generates a health score.
-          </p>
+          <SectionHeading
+            label="AI Scanner"
+            title="Scan any food packet."
+            subtitle="Upload a photo of the packaging. Our AI reads the label and generates an instant health report."
+            align="left"
+          />
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Upload Panel */}
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }} className="space-y-4">
-            <GlassCard color="green">
-              <div className="flex items-center gap-3 mb-5">
-                <span className="w-7 h-7 rounded-lg bg-safe/20 border border-safe/40 flex items-center justify-center text-xs font-mono text-safe">01</span>
-                <p className="hud-label">Upload Packet Image</p>
-              </div>
-              <ScanUploadBox onImageSelected={(f) => { setFile(f); setResult(null); setState('idle'); }} scanning={state === 'scanning'} />
-            </GlassCard>
-
-            {/* Action button */}
-            {file && state === 'idle' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                <NeonButton onClick={runScan} fullWidth size="xl" icon="🤖" variant="green">
-                  Initiate AI Scan
-                </NeonButton>
-              </motion.div>
-            )}
-
-            {state === 'done' && (
-              <NeonButton onClick={reset} variant="ghost" fullWidth size="md" icon="🔄">
-                Scan Another Product
-              </NeonButton>
-            )}
+          {/* Upload panel */}
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }} className="space-y-5">
+            <div className="premium-card p-6">
+              <ScanUploadBox
+                onImageSelected={(f) => { setFile(f); setResult(null); setState('idle'); }}
+                scanning={state === 'scanning'}
+              />
+              {file && state === 'idle' && (
+                <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mt-5">
+                  <Button onClick={runScan} fullWidth size="lg" icon="📸">Analyze Package</Button>
+                </motion.div>
+              )}
+              {state === 'done' && (
+                <div className="mt-5">
+                  <Button onClick={reset} variant="dark" fullWidth size="md" icon="🔄">Scan Another</Button>
+                </div>
+              )}
+            </div>
 
             {state === 'error' && (
-              <AlertBox type="error" title="SCAN FAILED" message="Could not process image. Ensure label is clearly visible and retry." onClose={reset} />
+              <AlertBox type="error" title="Scan Failed"
+                message="Could not process the image. Ensure the label is clearly visible and retry."
+                onClose={reset} />
             )}
 
             {/* How it works */}
-            <GlassCard color="green">
-              <p className="hud-label mb-3">Scanner Protocol</p>
-              <div className="space-y-2.5">
+            <div className="premium-card p-6">
+              <p className="text-gold text-xs font-medium uppercase tracking-wider mb-4">How It Works</p>
+              <div className="space-y-3">
                 {[
-                  { step: '01', text: 'Upload packet front/back image' },
-                  { step: '02', text: 'AI locates and reads the nutrition table' },
-                  { step: '03', text: 'Ingredients and additives extracted' },
-                  { step: '04', text: 'Health score generated with warnings' },
+                  { n: '01', text: 'Upload a clear image of the packet front or back.' },
+                  { n: '02', text: 'AI identifies the product and reads the nutrition table.' },
+                  { n: '03', text: 'Ingredients and additives are extracted and analysed.' },
+                  { n: '04', text: 'A health score, warnings and alternatives are generated.' },
                 ].map((s) => (
-                  <div key={s.step} className="flex items-center gap-3 text-xs font-mono">
-                    <span className="text-safe/60">[{s.step}]</span>
-                    <span className="text-gray-600">{s.text}</span>
+                  <div key={s.n} className="flex items-start gap-3 text-xs">
+                    <span className="text-gold/50 font-medium w-5 flex-shrink-0 mt-0.5">{s.n}</span>
+                    <span className="text-charcoal-400 leading-relaxed">{s.text}</span>
                   </div>
                 ))}
               </div>
-            </GlassCard>
+            </div>
           </motion.div>
 
-          {/* Output Panel */}
+          {/* Output panel */}
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="space-y-4">
             <AnimatePresence mode="wait">
               {/* Idle */}
               {state === 'idle' && (
-                <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                  <GlassCard color="green" className="py-12 text-center border-dashed">
-                    <div className="relative w-24 h-24 mx-auto mb-5">
-                      <ScanFrame className="w-24 h-24 bg-lab-surface border border-safe/20 flex items-center justify-center text-5xl rounded-xl">
-                        <span className="flex items-center justify-center w-full h-full text-4xl">📦</span>
-                      </ScanFrame>
-                      <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-lab-bg border border-neon-purple/40 flex items-center justify-center text-sm">🤖</div>
-                    </div>
-                    <p className="font-mono font-bold text-sm text-gray-400">AI SCANNER STANDBY</p>
-                    <p className="text-gray-700 font-mono text-xs mt-2">Upload an image to activate</p>
-
-                    {/* Mock nutrition grid */}
-                    <div className="mt-6 grid grid-cols-3 gap-2 opacity-30">
-                      {['📊 Cal', '🧂 Salt', '🍬 Sugar', '🥩 Protein', '🧈 Fat', '🔬 Additives'].map((l) => (
-                        <div key={l} className="bg-lab-surface border border-lab-border rounded text-xs font-mono text-gray-700 p-2">{l}</div>
+                <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <div className="premium-card py-16 text-center border-dashed border-charcoal-700">
+                    <p className="text-5xl mb-4">📦</p>
+                    <p className="text-gray-400 font-medium text-sm">Awaiting image upload</p>
+                    <p className="text-charcoal-500 text-xs mt-1">Upload a packet image to begin analysis</p>
+                    <div className="mt-6 grid grid-cols-3 gap-2 opacity-25 max-w-48 mx-auto">
+                      {['Cal', 'Fat', 'Sugar', 'Salt', 'Protein', 'Adds.'].map((l) => (
+                        <div key={l} className="bg-charcoal-800 border border-charcoal-700 rounded-lg text-xs text-charcoal-600 p-2 text-center">{l}</div>
                       ))}
                     </div>
-                  </GlassCard>
+                  </div>
                 </motion.div>
               )}
 
               {/* Scanning */}
               {state === 'scanning' && (
-                <motion.div key="scanning" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                  <GlassCard color="blue">
-                    {/* Scan visual */}
-                    <ScanFrame scanning className="h-36 bg-lab-surface rounded-lg flex items-center justify-center mb-5 border border-neon-blue/20">
-                      <span className="text-5xl relative z-10">📦</span>
-                    </ScanFrame>
+                <motion.div key="scanning" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <div className="premium-card p-6">
+                    {/* Mini scan visual */}
+                    <div className="relative h-28 rounded-xl overflow-hidden bg-charcoal-800 border border-charcoal-700 mb-6 flex items-center justify-center">
+                      <span className="text-4xl z-10 relative">📦</span>
+                      {/* Gold scan line */}
+                      <motion.div
+                        className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent"
+                        style={{ boxShadow: '0 0 12px rgba(212,175,55,0.6)' }}
+                        initial={{ top: '-2px' }}
+                        animate={{ top: '100%' }}
+                        transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                      />
+                      {/* Corner brackets */}
+                      {['top-2 left-2 border-t border-l', 'top-2 right-2 border-t border-r',
+                        'bottom-2 left-2 border-b border-l', 'bottom-2 right-2 border-b border-r'
+                      ].map((cls, i) => (
+                        <div key={i} className={`absolute w-4 h-4 ${cls} border-gold/60`} />
+                      ))}
+                    </div>
 
                     {/* Stage list */}
-                    <div className="space-y-2">
+                    <div className="space-y-2.5">
                       {scanStages.map((s, i) => {
                         const done   = i < stage;
                         const active = i === stage;
                         return (
                           <motion.div
                             key={s.id}
-                            initial={{ opacity: 0.3 }}
-                            animate={{ opacity: done || active ? 1 : 0.3 }}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-lg border font-mono text-xs transition-all duration-500
-                              ${done   ? 'bg-safe/5 border-safe/30 text-safe' :
-                                active ? 'bg-neon-blue/5 border-neon-blue/30 text-neon-blue' :
-                                         'bg-lab-surface border-lab-border text-gray-700'}`}
+                            animate={{ opacity: done || active ? 1 : 0.35 }}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-sm transition-all duration-500
+                              ${done   ? 'bg-safe-light border-safe/20 text-safe' :
+                                active ? 'bg-gold/5 border-gold/30 text-gold' :
+                                         'bg-charcoal-800 border-charcoal-700 text-charcoal-500'}`}
                           >
-                            <span className="text-base">{done ? '◉' : active ? '◈' : s.icon}</span>
-                            <span className="flex-1 uppercase tracking-widest">{s.label}</span>
-                            {active && (
-                              <span className="flex gap-0.5">
-                                {[0,1,2].map((n) => (
-                                  <span key={n} className="w-1 h-3 bg-neon-blue/60 rounded-full animate-bounce" style={{ animationDelay: `${n * 0.1}s` }} />
-                                ))}
-                              </span>
-                            )}
+                            <span className="text-base">{done ? '✓' : active ? s.icon : '○'}</span>
+                            <span className="flex-1 font-medium">{s.label}</span>
+                            {active && <LoaderSpinner size="sm" label="" />}
                           </motion.div>
                         );
                       })}
                     </div>
-                  </GlassCard>
+                  </div>
                 </motion.div>
               )}
 
               {/* Result */}
               {state === 'done' && result && (
-                <motion.div key="result" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                  {/* Confidence bar */}
-                  <div className="flex items-center gap-3 px-4 py-3 glass border border-safe/30 rounded-lg mb-4">
-                    <span className="text-lg">🤖</span>
-                    <div className="flex-1">
-                      <p className="text-safe text-xs font-mono font-bold uppercase tracking-widest">AI Analysis Complete</p>
-                      <p className="text-gray-600 text-xs font-mono">{result.confidence}% confidence · {result.brand}</p>
-                    </div>
-                    <span className="text-safe text-xs font-mono">◉ DONE</span>
+                <motion.div key="result" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+                  {/* Confidence indicator */}
+                  <div className="flex items-center gap-3 px-4 py-3 bg-safe-light border border-safe/20 rounded-xl mb-4">
+                    <span className="w-2 h-2 rounded-full bg-safe flex-shrink-0" />
+                    <p className="text-safe text-xs font-medium">Analysis complete · {result.confidence}% confidence</p>
                   </div>
 
-                  <GlassCard color="green" padding={false}>
-                    {/* Header */}
-                    <div className="px-6 py-5 border-b border-lab-border flex items-start justify-between gap-3">
+                  <div className="premium-card overflow-hidden">
+                    <div className="px-6 py-5 border-b border-charcoal-800 flex items-center justify-between gap-3">
                       <div>
-                        <p className="hud-label mb-1">Detected Product</p>
-                        <h3 className="text-white font-bold text-xl">{result.detected}</h3>
-                        <p className="text-gray-600 text-xs font-mono">{result.brand}</p>
+                        <p className="text-charcoal-400 text-xs mb-1">Detected Product</p>
+                        <h3 className="text-white font-semibold text-lg serif-heading">{result.detected}</h3>
+                        <p className="text-charcoal-500 text-xs">{result.brand}</p>
                       </div>
                       <HealthBadge status={result.status} size="lg" />
                     </div>
@@ -203,54 +185,46 @@ const ScanRatePage = () => {
                     <div className="p-6 space-y-5">
                       <RatingStars stars={result.stars} size="lg" />
 
-                      {/* Verdict */}
-                      <div className="bg-caution/5 border border-caution/30 rounded-lg px-4 py-3">
-                        <p className="text-caution text-xs font-mono">◈ {result.verdict}</p>
+                      <div className={`px-4 py-3 rounded-xl border text-sm font-medium
+                        ${result.status === 'safe' ? 'bg-safe-light border-safe/30 text-safe' :
+                          result.status === 'risk' ? 'bg-risk-light border-risk/30 text-risk' :
+                          'bg-caution-light border-caution/30 text-caution'}`}>
+                        {result.verdict}
                       </div>
 
-                      {/* Nutrition */}
                       <div>
-                        <p className="hud-label mb-3">Extracted Nutrition Data</p>
+                        <p className="text-charcoal-400 text-xs uppercase tracking-wider font-medium mb-3">Extracted Nutrition</p>
                         <div className="flex flex-wrap gap-2">
-                          <NutritionChip label="Cal" value={result.nutrition.calories.value} unit="kcal" nutritionKey="calories" />
-                          <NutritionChip label="Fat" value={result.nutrition.fat.value} unit="g" nutritionKey="fat" />
-                          <NutritionChip label="Sugar" value={result.nutrition.sugar.value} unit="g" nutritionKey="sugar" />
-                          <NutritionChip label="Salt" value={result.nutrition.salt.value} unit="g" nutritionKey="salt" />
-                          <NutritionChip label="Protein" value={result.nutrition.protein.value} unit="g" nutritionKey="protein" />
+                          <NutritionChip label="Calories" value={result.nutrition.calories.value} unit="kcal" nutritionKey="calories" />
+                          <NutritionChip label="Fat"      value={result.nutrition.fat.value}      unit="g"    nutritionKey="fat" />
+                          <NutritionChip label="Sugar"    value={result.nutrition.sugar.value}    unit="g"    nutritionKey="sugar" />
+                          <NutritionChip label="Salt"     value={result.nutrition.salt.value}     unit="g"    nutritionKey="salt" />
+                          <NutritionChip label="Protein"  value={result.nutrition.protein.value}  unit="g"    nutritionKey="protein" />
                         </div>
                       </div>
 
-                      {/* Labels */}
+                      {/* Warning labels */}
                       <div className="flex flex-wrap gap-2">
                         {result.labels.map((l) => (
-                          <span key={l} className="text-xs font-mono bg-risk/5 border border-risk/30 text-risk px-2.5 py-1 rounded">{l}</span>
+                          <span key={l} className="text-xs bg-risk-light border border-risk/20 text-risk px-2.5 py-1 rounded-lg font-medium">{l}</span>
                         ))}
                       </div>
 
-                      {/* Warnings */}
-                      <div className="bg-risk/5 border border-risk/20 rounded-lg p-4">
-                        <p className="text-risk text-xs font-mono uppercase tracking-widest mb-2">⚠ Risk Flags</p>
-                        {result.warnings.map((w) => (
-                          <p key={w} className="text-xs text-gray-500 font-mono">› {w}</p>
-                        ))}
+                      <div className="bg-charcoal-800 rounded-xl p-4 border border-charcoal-700">
+                        <p className="text-charcoal-400 text-xs font-medium mb-1.5">Recommendation</p>
+                        <p className="text-gray-400 text-sm leading-relaxed">{result.suggestion}</p>
                       </div>
 
-                      {/* Suggestion */}
-                      <div className="bg-lab-surface border border-lab-border rounded-lg p-4">
-                        <p className="text-gray-400 text-xs font-mono leading-relaxed">{result.suggestion}</p>
-                      </div>
-
-                      {/* Alternatives */}
                       <div>
-                        <p className="text-safe text-xs font-mono uppercase tracking-widest mb-2">◉ Healthier Alternatives</p>
+                        <p className="text-safe text-xs font-medium uppercase tracking-wider mb-2">✓ Healthier Alternatives</p>
                         <div className="flex flex-wrap gap-2">
                           {result.alternatives.map((a) => (
-                            <span key={a} className="text-xs font-mono bg-safe/5 border border-safe/30 text-safe px-2.5 py-1 rounded">{a}</span>
+                            <span key={a} className="text-xs bg-safe-light border border-safe/20 text-safe px-2.5 py-1.5 rounded-lg font-medium">{a}</span>
                           ))}
                         </div>
                       </div>
                     </div>
-                  </GlassCard>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

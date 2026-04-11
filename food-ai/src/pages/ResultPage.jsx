@@ -2,19 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import GlassCard from '../components/GlassCard';
 import RatingStars from '../components/RatingStars';
 import HealthBadge from '../components/HealthBadge';
 import NutritionChip from '../components/NutritionChip';
-import HealthBar from '../components/HealthBar';
-import NeonButton from '../components/NeonButton';
-import LabLoader from '../components/LabLoader';
+import Button from '../components/Button';
+import LoaderSpinner from '../components/LoaderSpinner';
 import { products } from '../data/products';
 import { getGeneralRating, getStatusFromStars } from '../data/ratings';
 
 const ResultPage = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { id }       = useParams();
+  const navigate     = useNavigate();
   const [product, setProduct] = useState(null);
   const [rating,  setRating]  = useState(null);
   const [loading, setLoading] = useState(true);
@@ -25,13 +23,13 @@ const ResultPage = () => {
       const p = products.find((x) => x.id === parseInt(id));
       if (p) { setProduct(p); setRating(getGeneralRating(p.id, 'adults')); }
       setLoading(false);
-    }, 800);
+    }, 600);
   }, [id]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <LabLoader label="Loading product data..." size="lg" />
+        <LoaderSpinner label="Loading product report..." size="lg" />
       </div>
     );
   }
@@ -40,10 +38,10 @@ const ResultPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center text-center px-4">
         <div>
-          <p className="text-6xl mb-4">🔍</p>
-          <p className="font-mono font-bold text-xl text-gray-300 mb-2">PRODUCT NOT FOUND</p>
-          <p className="text-gray-600 font-mono text-sm mb-6">ID {id} is not in the database.</p>
-          <NeonButton onClick={() => navigate('/general-rating')} icon="←">Back to Lab</NeonButton>
+          <p className="text-5xl mb-4">🔍</p>
+          <p className="serif-heading text-2xl text-white font-bold mb-2">Product Not Found</p>
+          <p className="text-charcoal-400 text-sm mb-6">This product doesn't exist in our database.</p>
+          <Button onClick={() => navigate('/general-rating')} icon="←">Back to Rating</Button>
         </div>
       </div>
     );
@@ -51,160 +49,164 @@ const ResultPage = () => {
 
   const statusObj = getStatusFromStars(rating?.stars || 2.5);
   const status    = statusObj.color;
-  const hPct      = Math.round(((rating?.stars || 2.5) / 5) * 100);
-  const color     = status === 'safe' ? 'green' : status === 'risk' ? 'red' : 'yellow';
+  const borderColor = status === 'safe' ? 'border-safe/20' : status === 'risk' ? 'border-risk/20' : 'border-caution/20';
+  const bgAccent    = status === 'safe' ? 'from-safe/5' : status === 'risk' ? 'from-risk/5' : 'from-caution/5';
 
-  const goodFor    = { safe: ['Healthy adults', 'Teens in moderation'], caution: ['Adults without conditions', 'Occasional enjoyment'], risk: ['No group should consume regularly'] };
-  const notGoodFor = { safe: ['Diabetic patients', 'Low-sodium diets'], caution: ['Children under 12', 'Diabetes/BP patients'], risk: ['All at-risk groups', 'Children', 'Seniors'] };
-  const alts = { 1: ['Baked chips','Rice cakes'], 2: ['Makhana','Roasted chana'], 3: ['Oat noodles','Millet noodles'], 4: ['Oat cookies','Dark chocolate'], 5: ['Dark 70%+ chocolate','Dates'], 6: ['Coconut water','Lemon water'], 7: ['Multigrain biscuits','Oat crackers'], 8: ['Roasted chana','Makhana'], 9: ['Fresh fruit','Smoothies'], 10: ['Makhana','Popcorn'] };
+  const goodFor    = {
+    safe:    ['Most healthy adults', 'Active teens', 'Occasional indulgence'],
+    caution: ['Healthy adults in moderation', 'Non-diabetic users'],
+    risk:    ['Healthy adults on rare occasions only'],
+  };
+  const notGoodFor = {
+    safe:    ['Patients on strict low-sodium diets'],
+    caution: ['Children under 10', 'Diabetics', 'Hypertension patients'],
+    risk:    ['Diabetics', 'Children', 'Heart patients', 'BP patients'],
+  };
+  const alts = { 1: ['Baked chips', 'Rice cakes'], 2: ['Oat noodles', 'Millet noodles'], 3: ['Oat cookies', 'Dark chocolate'], 4: ['Dark 70%+ choc.', 'Dates'], 5: ['Coconut water', 'Lemon water'], 6: ['Multigrain biscuits'], 7: ['Roasted chana', 'Makhana'], 8: ['Mixed nuts', 'Roasted seeds'], 9: ['Fresh fruit', 'Smoothies'], 10: ['Makhana', 'Popcorn'] };
 
   return (
     <div className="min-h-screen pt-24 pb-16">
-      <div className="max-w-5xl mx-auto px-4 md:px-8">
+      <div className="max-w-4xl mx-auto px-4 md:px-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 font-mono text-xs text-gray-700 mb-8">
-          <Link to="/" className="hover:text-neon-blue transition-colors">HOME</Link>
+        <div className="flex items-center gap-2 text-xs text-charcoal-500 mb-8 font-medium">
+          <Link to="/" className="hover:text-gold transition-colors">Home</Link>
           <span>/</span>
-          <Link to="/general-rating" className="hover:text-neon-blue transition-colors">LAB</Link>
+          <Link to="/general-rating" className="hover:text-gold transition-colors">General Rating</Link>
           <span>/</span>
-          <span className="text-gray-400">{product.name.toUpperCase()}</span>
+          <span className="text-charcoal-300">{product.name}</span>
         </div>
 
-        {/* Hero Card */}
+        {/* Hero card */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <GlassCard color={color} padding={false} className="mb-6">
+          <div className={`rounded-2xl border ${borderColor} overflow-hidden mb-6`}>
             <div className="grid grid-cols-1 md:grid-cols-2">
               {/* Image */}
-              <div className="relative h-56 md:h-auto overflow-hidden rounded-t-xl md:rounded-l-xl md:rounded-tr-none bg-lab-surface">
+              <div className="relative h-56 md:h-auto bg-charcoal-800 overflow-hidden">
                 <img src={product.image} alt={product.name}
-                  className="w-full h-full object-cover opacity-70"
+                  className="w-full h-full object-cover opacity-80"
                   onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
                 />
-                <div className="hidden w-full h-full items-center justify-center text-8xl bg-lab-surface">{product.emoji}</div>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-lab-card/50 hidden md:block" />
-                {/* Scan overlay */}
-                <div className="absolute inset-0 pointer-events-none"
-                  style={{ backgroundImage: 'linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px)', backgroundSize: '12px 12px' }} />
+                <div className="hidden w-full h-full items-center justify-center text-8xl bg-charcoal-800">{product.emoji}</div>
+                <div className={`absolute inset-0 bg-gradient-to-r from-transparent to-charcoal-900/40`} />
               </div>
 
               {/* Info */}
-              <div className="p-7 space-y-4">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-mono border border-lab-border bg-lab-surface text-gray-500 px-2 py-0.5 rounded">{product.category.toUpperCase()}</span>
+              <div className={`p-7 bg-gradient-to-br ${bgAccent} to-charcoal-900`}>
+                <div className="flex items-center gap-2 flex-wrap mb-3">
+                  <span className="text-xs bg-charcoal-800 text-charcoal-400 px-2.5 py-1 rounded-full border border-charcoal-700">{product.category}</span>
                   <HealthBadge status={status} />
                 </div>
-                <h1 className="text-2xl md:text-3xl font-black text-white">{product.name}</h1>
-                <p className="text-gray-600 font-mono text-sm">{product.brand}</p>
-
-                <RatingStars stars={rating?.stars || 2.5} size="lg" />
-                <HealthBar value={hPct} label="Health Score" color={status === 'safe' ? 'safe' : status === 'risk' ? 'risk' : 'caution'} />
-
+                <h1 className="serif-heading text-2xl md:text-3xl font-bold text-white mb-1">{product.name}</h1>
+                <p className="text-charcoal-400 text-sm mb-5">{product.brand}</p>
+                <RatingStars stars={rating?.stars || 2.5} size="lg" className="mb-4" />
                 {rating?.verdict && (
-                  <div className={`px-4 py-3 rounded-lg border font-mono text-xs
-                    ${status === 'safe' ? 'border-safe/30 bg-safe/5 text-safe' :
-                      status === 'risk' ? 'border-risk/30 bg-risk/5 text-risk' :
-                      'border-caution/30 bg-caution/5 text-caution'}`}>
-                    ◈ {rating.verdict}
+                  <div className={`px-4 py-3 rounded-xl border text-sm font-medium mb-5
+                    ${status === 'safe' ? 'bg-safe-light border-safe/30 text-safe' :
+                      status === 'risk' ? 'bg-risk-light border-risk/30 text-risk' :
+                      'bg-caution-light border-caution/30 text-caution'}`}>
+                    {rating.verdict}
                   </div>
                 )}
-
-                <div className="flex flex-wrap gap-2">
-                  <Link to="/general-rating"><NeonButton variant="ghost" size="sm" icon="←">Back</NeonButton></Link>
-                  <Link to="/personalized"><NeonButton variant="purple" size="sm" icon="🧬">Personal Sim</NeonButton></Link>
+                <div className="flex gap-3 flex-wrap">
+                  <Button onClick={() => navigate('/general-rating')} variant="dark" size="sm" icon="←">Back</Button>
+                  <Link to="/personalized">
+                    <Button variant="outline" size="sm" icon="🧬">Get My Score</Button>
+                  </Link>
                 </div>
               </div>
             </div>
-          </GlassCard>
+          </div>
         </motion.div>
 
         {/* Nutrition */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <GlassCard className="mb-5">
-            <p className="hud-label mb-4">Nutritional Profile — per 100g</p>
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+          <div className="premium-card p-6 mb-5">
+            <p className="section-label mb-4">Nutrition · per 100g</p>
             <div className="flex flex-wrap gap-3">
-              <NutritionChip label="Cal"     value={product.nutrition.calories} unit="kcal" nutritionKey="calories" delay={0.1} />
-              <NutritionChip label="Fat"     value={product.nutrition.fat}      unit="g"    nutritionKey="fat"      delay={0.15} />
-              <NutritionChip label="Sugar"   value={product.nutrition.sugar}    unit="g"    nutritionKey="sugar"    delay={0.2} />
-              <NutritionChip label="Salt"    value={product.nutrition.salt}     unit="g"    nutritionKey="salt"     delay={0.25} />
-              <NutritionChip label="Protein" value={product.nutrition.protein}  unit="g"    nutritionKey="protein"  delay={0.3} />
-              <NutritionChip
-                label="Additives" value={product.nutrition.additives} unit=""
-                level={product.nutrition.additives === 'Low' ? 'low' : product.nutrition.additives === 'High' ? 'high' : 'medium'}
-                delay={0.35}
-              />
+              <NutritionChip label="Calories" value={product.nutrition.calories} unit="kcal" nutritionKey="calories" delay={0.1} />
+              <NutritionChip label="Fat"      value={product.nutrition.fat}      unit="g"    nutritionKey="fat"      delay={0.15} />
+              <NutritionChip label="Sugar"    value={product.nutrition.sugar}    unit="g"    nutritionKey="sugar"    delay={0.2} />
+              <NutritionChip label="Salt"     value={product.nutrition.salt}     unit="g"    nutritionKey="salt"     delay={0.25} />
+              <NutritionChip label="Protein"  value={product.nutrition.protein}  unit="g"    nutritionKey="protein"  delay={0.3} />
+              <NutritionChip label="Additives" value={product.nutrition.additives} unit=""
+                level={product.nutrition.additives === 'Low' ? 'good' : product.nutrition.additives === 'High' ? 'bad' : 'mid'} delay={0.35} />
             </div>
-          </GlassCard>
+          </div>
         </motion.div>
 
-        {/* Good / Bad */}
+        {/* Good for / Not good for */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
-            <GlassCard color="green">
-              <p className="text-safe text-xs font-mono uppercase tracking-widest mb-3">◉ Suitable For</p>
+          <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }}>
+            <div className="bg-safe-light border border-safe/20 rounded-2xl p-5 h-full">
+              <p className="text-safe text-xs font-semibold uppercase tracking-wider mb-3">✓ Good For</p>
               <ul className="space-y-2">
-                {(goodFor[status] || goodFor.caution).map((i) => (
-                  <li key={i} className="text-xs text-gray-500 font-mono flex items-start gap-2"><span className="text-safe">›</span>{i}</li>
+                {(goodFor[status] || goodFor.caution).map((item) => (
+                  <li key={item} className="text-sm text-charcoal-600 flex items-start gap-2">
+                    <span className="text-safe mt-0.5">›</span>{item}
+                  </li>
                 ))}
               </ul>
-            </GlassCard>
+            </div>
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-            <GlassCard color="red">
-              <p className="text-risk text-xs font-mono uppercase tracking-widest mb-3">⚠ Not Suitable For</p>
+          <motion.div initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
+            <div className="bg-risk-light border border-risk/20 rounded-2xl p-5 h-full">
+              <p className="text-risk text-xs font-semibold uppercase tracking-wider mb-3">⚠ Not Good For</p>
               <ul className="space-y-2">
-                {(notGoodFor[status] || notGoodFor.caution).map((i) => (
-                  <li key={i} className="text-xs text-gray-500 font-mono flex items-start gap-2"><span className="text-risk">›</span>{i}</li>
+                {(notGoodFor[status] || notGoodFor.caution).map((item) => (
+                  <li key={item} className="text-sm text-charcoal-600 flex items-start gap-2">
+                    <span className="text-risk mt-0.5">›</span>{item}
+                  </li>
                 ))}
               </ul>
-            </GlassCard>
+            </div>
           </motion.div>
         </div>
 
-        {/* Explanation & Alternatives */}
+        {/* Explanation, Frequency, Alternatives */}
         {rating?.explanation && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
-            <GlassCard className="mb-5">
-              <p className="hud-label mb-3">AI Analysis</p>
-              <p className="text-gray-500 font-mono text-xs leading-relaxed">{rating.explanation}</p>
-            </GlassCard>
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
+            <div className="premium-card p-6 mb-5">
+              <p className="section-label mb-3">Expert Analysis</p>
+              <p className="text-charcoal-300 text-sm leading-relaxed">{rating.explanation}</p>
+            </div>
           </motion.div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
           {rating?.frequency_label && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
-              <GlassCard color={color} className="flex items-center gap-4">
+              <div className="premium-card p-5 flex items-center gap-4">
                 <span className="text-3xl">⏱</span>
                 <div>
-                  <p className="hud-label">Recommended Frequency</p>
-                  <p className="text-gray-200 font-mono font-bold text-sm mt-1">{rating.frequency_label}</p>
+                  <p className="section-label mb-1">Suggested Frequency</p>
+                  <p className="text-gray-200 font-semibold text-sm">{rating.frequency_label}</p>
                 </div>
-              </GlassCard>
+              </div>
             </motion.div>
           )}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}>
-            <GlassCard color="green">
-              <p className="text-safe text-xs font-mono uppercase tracking-widest mb-3">◉ Healthier Alternatives</p>
+            <div className="premium-card p-5">
+              <p className="text-safe text-xs font-semibold uppercase tracking-wider mb-3">✓ Healthier Alternatives</p>
               <div className="flex flex-wrap gap-2">
                 {(alts[product.id] || ['Whole foods', 'Fresh fruit']).map((a) => (
-                  <span key={a} className="text-xs font-mono bg-safe/5 border border-safe/30 text-safe px-2.5 py-1 rounded">{a}</span>
+                  <span key={a} className="text-xs bg-safe-light border border-safe/20 text-safe px-2.5 py-1.5 rounded-lg font-medium">{a}</span>
                 ))}
               </div>
-            </GlassCard>
+            </div>
           </motion.div>
         </div>
 
-        {/* CTA */}
+        {/* Personalized CTA */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
-          <GlassCard color="purple" className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="premium-card p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <p className="font-mono font-bold text-sm text-gray-200">Want a personalized simulation?</p>
-              <p className="text-gray-600 font-mono text-xs mt-1">Enter your health profile for a score built for you.</p>
+              <p className="text-gray-200 font-semibold text-sm">Get a rating built for you.</p>
+              <p className="text-charcoal-400 text-xs mt-1">Enter your health profile for a personalized score.</p>
             </div>
             <Link to="/personalized">
-              <NeonButton variant="purple" icon="🧬">Start DNA Mode</NeonButton>
+              <Button variant="gold" icon="🧬">Personalized Rating</Button>
             </Link>
-          </GlassCard>
+          </div>
         </motion.div>
       </div>
     </div>

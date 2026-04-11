@@ -4,141 +4,132 @@ import { motion } from 'framer-motion';
 import RatingStars from './RatingStars';
 import HealthBadge from './HealthBadge';
 import NutritionChip from './NutritionChip';
-import HealthBar from './HealthBar';
-import GlassCard from './GlassCard';
 
 const getStatus = (stars) => stars >= 4 ? 'safe' : stars >= 2.5 ? 'caution' : 'risk';
-const getHealthPercent = (stars) => Math.round((stars / 5) * 100);
-const getHealthColor = (stars) => stars >= 4 ? 'safe' : stars >= 2.5 ? 'caution' : 'risk';
 
-const ResultCard = ({ product, rating, personalized = false, className = '' }) => {
+const ResultCard = ({ product, rating, personalized = false, generalRating = null, className = '' }) => {
   if (!product || !rating) return null;
-  const { stars = 2.5, verdict, explanation, warnings = [], positives = [], frequency_label, notes = [], suggestion } = rating;
 
-  const status  = rating.status?.color || getStatus(stars);
-  const hPct    = getHealthPercent(stars);
-  const hColor  = getHealthColor(stars);
-  const borderColor = status === 'safe' ? 'green' : status === 'risk' ? 'red' : 'yellow';
+  const { stars = 2.5, verdict, explanation, warnings = [], positives = [], frequency_label, notes = [] } = rating;
+  const status = getStatus(stars);
+  const borderColor = status === 'safe' ? 'border-safe/20' : status === 'risk' ? 'border-risk/20' : 'border-caution/20';
+  const headerBg    = status === 'safe' ? 'from-safe/5' : status === 'risk' ? 'from-risk/5' : 'from-caution/5';
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className={className}
+      className={`rounded-2xl border ${borderColor} overflow-hidden bg-charcoal-900 ${className}`}
     >
-      <GlassCard color={borderColor} padding={false}>
-        {/* Header */}
-        <div className="px-6 py-5 border-b border-lab-border flex items-center justify-between flex-wrap gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl bg-lab-surface flex items-center justify-center text-3xl border border-lab-border">
-              {product.emoji}
+      {/* Header */}
+      <div className={`px-6 py-5 bg-gradient-to-r ${headerBg} to-transparent border-b border-charcoal-800 flex items-center gap-4`}>
+        <div className="w-14 h-14 rounded-xl bg-charcoal-800 border border-charcoal-700 flex items-center justify-center text-3xl flex-shrink-0">
+          {product.emoji}
+        </div>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-white font-semibold text-lg serif-heading truncate">{product.name}</h3>
+          <p className="text-charcoal-400 text-xs mt-0.5">{product.brand} · {product.category}</p>
+        </div>
+        <HealthBadge status={status} size="md" />
+      </div>
+
+      <div className="p-6 space-y-5">
+        {/* Rating */}
+        <RatingStars stars={stars} size="lg" />
+
+        {/* Comparison (personalized mode) */}
+        {personalized && generalRating && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="grid grid-cols-2 gap-3"
+          >
+            <div className="text-center p-3 bg-charcoal-800 rounded-xl border border-charcoal-700">
+              <p className="text-charcoal-400 text-xs mb-1.5">General users</p>
+              <RatingStars stars={generalRating.stars} size="sm" />
             </div>
+            <div className={`text-center p-3 rounded-xl border ${status === 'safe' ? 'bg-safe-light border-safe/30' : status === 'risk' ? 'bg-risk-light border-risk/30' : 'bg-caution-light border-caution/30'}`}>
+              <p className={`text-xs mb-1.5 font-medium ${status === 'safe' ? 'text-safe' : status === 'risk' ? 'text-risk' : 'text-caution'}`}>For you</p>
+              <RatingStars stars={stars} size="sm" />
+            </div>
+          </motion.div>
+        )}
+
+        {/* Verdict */}
+        {verdict && (
+          <div className={`px-4 py-3 rounded-xl border text-sm font-medium
+            ${status === 'safe'    ? 'bg-safe-light border-safe/30 text-safe' :
+              status === 'risk'    ? 'bg-risk-light border-risk/30 text-risk' :
+              'bg-caution-light border-caution/30 text-caution'}`}>
+            {verdict}
+          </div>
+        )}
+
+        {/* Nutrition */}
+        <div>
+          <p className="text-xs text-charcoal-400 font-medium uppercase tracking-wider mb-3">Nutrition · per 100g</p>
+          <div className="flex flex-wrap gap-2">
+            <NutritionChip label="Calories" value={product.nutrition.calories} unit="kcal" nutritionKey="calories" delay={0.1} />
+            <NutritionChip label="Fat"      value={product.nutrition.fat}      unit="g"    nutritionKey="fat"      delay={0.15} />
+            <NutritionChip label="Sugar"    value={product.nutrition.sugar}    unit="g"    nutritionKey="sugar"    delay={0.2} />
+            <NutritionChip label="Salt"     value={product.nutrition.salt}     unit="g"    nutritionKey="salt"     delay={0.25} />
+            <NutritionChip label="Protein"  value={product.nutrition.protein}  unit="g"    nutritionKey="protein"  delay={0.3} />
+          </div>
+        </div>
+
+        {/* Explanation */}
+        {explanation && (
+          <div className="bg-charcoal-800 rounded-xl p-4 border border-charcoal-700">
+            <p className="text-xs text-charcoal-400 uppercase tracking-wider font-medium mb-2">Analysis</p>
+            <p className="text-gray-400 text-sm leading-relaxed">{explanation}</p>
+          </div>
+        )}
+
+        {/* Personalized notes */}
+        {personalized && notes.length > 0 && (
+          <div className="space-y-2">
+            {notes.map((note, i) => (
+              <div key={i} className="flex items-start gap-2.5 px-4 py-3 bg-gold/5 border border-gold/15 rounded-xl">
+                <span className="text-gold text-sm mt-0.5 flex-shrink-0">★</span>
+                <p className="text-gray-400 text-sm leading-relaxed">{note}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Warnings + Positives */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {warnings.length > 0 && (
+            <div className="bg-risk-light border border-risk/20 rounded-xl p-4">
+              <p className="text-risk text-xs font-semibold uppercase tracking-wider mb-2">⚠ Risk Factors</p>
+              <ul className="space-y-1.5">
+                {warnings.map((w, i) => <li key={i} className="text-xs text-charcoal-600 flex items-start gap-2"><span className="text-risk mt-0.5">›</span>{w}</li>)}
+              </ul>
+            </div>
+          )}
+          {positives.length > 0 && (
+            <div className="bg-safe-light border border-safe/20 rounded-xl p-4">
+              <p className="text-safe text-xs font-semibold uppercase tracking-wider mb-2">✓ Positives</p>
+              <ul className="space-y-1.5">
+                {positives.map((p, i) => <li key={i} className="text-xs text-charcoal-600 flex items-start gap-2"><span className="text-safe mt-0.5">›</span>{p}</li>)}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        {/* Frequency */}
+        {frequency_label && (
+          <div className="flex items-center gap-3 py-3 px-4 bg-charcoal-800 border border-charcoal-700 rounded-xl">
+            <span className="text-xl">⏱</span>
             <div>
-              <p className="hud-label mb-0.5">Analysis Result</p>
-              <h3 className="text-white font-bold text-xl">{product.name}</h3>
-              <p className="text-gray-500 text-xs font-mono">{product.brand} · {product.category}</p>
+              <p className="text-charcoal-400 text-xs">Suggested frequency</p>
+              <p className="text-gray-200 text-sm font-medium mt-0.5">{frequency_label}</p>
             </div>
           </div>
-          <HealthBadge status={status} size="lg" />
-        </div>
-
-        <div className="p-6 space-y-5">
-          {/* Rating Row */}
-          <div className="flex flex-wrap items-center gap-6">
-            <RatingStars stars={stars} size="lg" />
-            <div className="flex-1 min-w-[180px]">
-              <HealthBar
-                value={hPct}
-                label="Health Score"
-                color={hColor}
-              />
-            </div>
-          </div>
-
-          {/* Verdict */}
-          {(verdict || suggestion) && (
-            <div className={`px-4 py-3 rounded-lg glass font-mono text-sm
-              ${status === 'safe' ? 'border-safe/30 text-safe' :
-                status === 'risk' ? 'border-risk/30 text-risk' : 'border-caution/30 text-caution'}
-              border`}
-              style={{ boxShadow: status === 'safe' ? '0 0 12px rgba(0,255,136,0.1)' : status === 'risk' ? '0 0 12px rgba(255,68,68,0.1)' : '0 0 12px rgba(255,215,0,0.1)' }}
-            >
-              ◈ {verdict || suggestion}
-            </div>
-          )}
-
-          {/* Nutrition Grid */}
-          <div>
-            <p className="hud-label mb-3">Nutritional Analysis — per 100g</p>
-            <div className="flex flex-wrap gap-2">
-              <NutritionChip label="Cal" value={product.nutrition.calories} unit="kcal" nutritionKey="calories" delay={0.1} />
-              <NutritionChip label="Fat" value={product.nutrition.fat} unit="g" nutritionKey="fat" delay={0.15} />
-              <NutritionChip label="Sugar" value={product.nutrition.sugar} unit="g" nutritionKey="sugar" delay={0.2} />
-              <NutritionChip label="Salt" value={product.nutrition.salt} unit="g" nutritionKey="salt" delay={0.25} />
-              <NutritionChip label="Protein" value={product.nutrition.protein} unit="g" nutritionKey="protein" delay={0.3} />
-            </div>
-          </div>
-
-          {/* Explanation */}
-          {explanation && (
-            <div className="bg-lab-surface border border-lab-border rounded-lg p-4">
-              <p className="hud-label mb-2">AI Explanation</p>
-              <p className="text-gray-400 text-sm font-mono leading-relaxed">{explanation}</p>
-            </div>
-          )}
-
-          {/* Personalized Notes */}
-          {personalized && notes.length > 0 && (
-            <div className="space-y-2">
-              {notes.map((note, i) => (
-                <div key={i} className="bg-neon-blue/5 border border-neon-blue/20 rounded-lg px-4 py-3">
-                  <p className="text-neon-blue text-xs font-mono">◈ {note}</p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Warnings & Positives */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {warnings.length > 0 && (
-              <div className="bg-risk/5 border border-risk/20 rounded-lg p-4">
-                <p className="text-risk text-xs font-mono uppercase tracking-widest mb-2">⚠ Risk Factors</p>
-                <ul className="space-y-1.5">
-                  {warnings.map((w, i) => (
-                    <li key={i} className="text-xs text-gray-400 font-mono flex items-start gap-2">
-                      <span className="text-risk">›</span>{w}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {positives.length > 0 && (
-              <div className="bg-safe/5 border border-safe/20 rounded-lg p-4">
-                <p className="text-safe text-xs font-mono uppercase tracking-widest mb-2">◉ Positives</p>
-                <ul className="space-y-1.5">
-                  {positives.map((p, i) => (
-                    <li key={i} className="text-xs text-gray-400 font-mono flex items-start gap-2">
-                      <span className="text-safe">›</span>{p}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-
-          {/* Frequency */}
-          {(frequency_label || suggestion) && (
-            <div className="flex items-center gap-4 p-4 bg-lab-surface border border-lab-border rounded-lg">
-              <span className="text-2xl">⏱</span>
-              <div>
-                <p className="hud-label">Suggested Frequency</p>
-                <p className="text-gray-200 text-sm font-mono font-semibold mt-0.5">{frequency_label || suggestion}</p>
-              </div>
-            </div>
-          )}
-        </div>
-      </GlassCard>
+        )}
+      </div>
     </motion.div>
   );
 };

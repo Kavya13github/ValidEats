@@ -1,37 +1,34 @@
 // src/components/SectionHeading.jsx
 import React from 'react';
+import { motion } from 'framer-motion';
 
-const SectionHeading = ({
-  label,
-  title,
-  subtitle,
-  align = 'center',
-  className = '',
-}) => {
-  const alignClass = {
-    center: 'text-center items-center',
-    left: 'text-left items-start',
-    right: 'text-right items-end',
-  };
+const SectionHeading = ({ label, title, subtitle, align = 'center', light = false, className = '' }) => {
+  const textAlign = align === 'center' ? 'text-center items-center' : 'text-left items-start';
 
   return (
-    <div className={`flex flex-col gap-3 ${alignClass[align]} ${className}`}>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className={`flex flex-col gap-3 ${textAlign} ${className}`}
+    >
       {label && (
-        <span className="inline-flex items-center gap-2 text-primary font-semibold text-sm uppercase tracking-widest">
-          <span className="w-6 h-0.5 bg-primary rounded-full" />
-          {label}
-          <span className="w-6 h-0.5 bg-primary rounded-full" />
-        </span>
+        <div className="flex items-center gap-3">
+          {align === 'center' && <div className="h-px w-12 bg-gradient-to-r from-transparent to-gold/50" />}
+          <span className="section-label">{label}</span>
+          {align === 'center' && <div className="h-px w-12 bg-gradient-to-l from-transparent to-gold/50" />}
+        </div>
       )}
-      <h2 className="text-3xl md:text-4xl font-bold text-text leading-tight">
+      <h2 className={`serif-heading text-3xl md:text-4xl font-bold leading-tight ${light ? 'text-charcoal-900' : 'text-white'}`}>
         {title}
       </h2>
       {subtitle && (
-        <p className="text-text-secondary text-base md:text-lg max-w-2xl leading-relaxed">
+        <p className={`text-sm leading-relaxed max-w-xl ${align === 'center' ? 'mx-auto' : ''} ${light ? 'text-charcoal-500' : 'text-charcoal-300'}`}>
           {subtitle}
         </p>
       )}
-    </div>
+    </motion.div>
   );
 };
 

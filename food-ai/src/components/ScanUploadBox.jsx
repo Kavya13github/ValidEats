@@ -1,10 +1,9 @@
 // src/components/ScanUploadBox.jsx
 import React, { useState, useRef } from 'react';
-import ScanFrame from './ScanFrame';
-import NeonButton from './NeonButton';
+import Button from './Button';
 
 const ScanUploadBox = ({ onImageSelected, scanning = false, className = '' }) => {
-  const [preview, setPreview] = useState(null);
+  const [preview,  setPreview]  = useState(null);
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef(null);
 
@@ -17,48 +16,63 @@ const ScanUploadBox = ({ onImageSelected, scanning = false, className = '' }) =>
   return (
     <div className={className}>
       {preview ? (
-        <ScanFrame scanning={scanning} className="rounded-xl overflow-hidden border border-neon-blue/30">
-          <img src={preview} alt="Packet" className="w-full max-h-72 object-contain bg-lab-card" />
-          {!scanning && (
-            <div className="absolute inset-0 flex items-end justify-center pb-4 bg-gradient-to-t from-lab-bg/80 to-transparent">
-              <div className="flex gap-3">
-                <span className="text-safe text-xs font-mono bg-lab-bg/90 px-3 py-1.5 rounded border border-safe/30">◉ IMAGE LOADED</span>
-                <button
-                  onClick={() => { setPreview(null); if (inputRef.current) inputRef.current.value = ''; }}
-                  className="text-gray-500 hover:text-gray-300 text-xs font-mono bg-lab-bg/90 px-3 py-1.5 rounded border border-lab-border"
-                >
-                  [CHANGE]
-                </button>
-              </div>
+        /* Image preview with scan overlay */
+        <div className="relative rounded-xl overflow-hidden border border-gold/30 bg-charcoal-900">
+          <img src={preview} alt="Food packet" className="w-full max-h-72 object-contain" />
+
+          {/* Corner brackets */}
+          {['top-0 left-0 border-t border-l', 'top-0 right-0 border-t border-r',
+            'bottom-0 left-0 border-b border-l', 'bottom-0 right-0 border-b border-r'
+          ].map((pos, i) => (
+            <div key={i} className={`absolute w-6 h-6 ${pos} border-gold`} />
+          ))}
+
+          {scanning && (
+            <div className="absolute inset-0">
+              <div className="scan-line" />
+              <div className="absolute inset-0 bg-gradient-to-b from-gold/3 to-transparent pointer-events-none" />
             </div>
           )}
-        </ScanFrame>
+
+          {!scanning && (
+            <div className="absolute inset-x-0 bottom-0 flex items-center justify-between px-4 py-3 bg-gradient-to-t from-charcoal-900 via-charcoal-900/80 to-transparent">
+              <span className="text-safe text-xs font-medium flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-safe" />Image loaded
+              </span>
+              <button
+                onClick={() => { setPreview(null); if (inputRef.current) inputRef.current.value = ''; }}
+                className="text-charcoal-400 hover:text-white text-xs transition-colors"
+              >
+                Change image
+              </button>
+            </div>
+          )}
+        </div>
       ) : (
+        /* Drop zone */
         <div
           onDrop={(e) => { e.preventDefault(); setDragging(false); handle(e.dataTransfer.files[0]); }}
           onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
           onDragLeave={() => setDragging(false)}
           onClick={() => inputRef.current?.click()}
-          className={`
-            border-2 border-dashed rounded-xl p-10 text-center cursor-pointer
-            transition-all duration-300 relative overflow-hidden
-            ${dragging ? 'border-neon-blue bg-neon-blue/5 shadow-neon' : 'border-lab-border hover:border-neon-blue/50 hover:bg-neon-blue/5'}
-          `}
+          className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-300
+            ${dragging
+              ? 'border-gold/60 bg-gold/5 shadow-gold'
+              : 'border-charcoal-700 hover:border-gold/40 hover:bg-charcoal-900'}`}
         >
-          {/* Grid overlay */}
-          <div className="absolute inset-0 pointer-events-none opacity-20"
-            style={{ backgroundImage: 'linear-gradient(rgba(0,212,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-
-          <div className="relative flex flex-col items-center gap-4">
-            <div className={`w-20 h-20 rounded-xl border ${dragging ? 'border-neon-blue bg-neon-blue/20 shadow-neon' : 'border-lab-border bg-lab-surface'} flex items-center justify-center text-4xl transition-all`}>
+          <div className="flex flex-col items-center gap-4">
+            <div className={`w-20 h-20 rounded-xl flex items-center justify-center text-4xl border transition-all duration-300
+              ${dragging ? 'bg-gold/10 border-gold/40' : 'bg-charcoal-800 border-charcoal-700'}`}>
               📦
             </div>
             <div>
-              <p className="text-gray-300 font-mono font-medium text-sm">{dragging ? 'DROP TO UPLOAD' : 'UPLOAD PACKET IMAGE'}</p>
-              <p className="text-gray-600 font-mono text-xs mt-1">Drag & drop or click to browse</p>
-              <p className="text-gray-700 font-mono text-xs">JPG · PNG · WEBP</p>
+              <p className="text-gray-300 font-medium text-sm">
+                {dragging ? 'Drop to upload' : 'Upload food packet image'}
+              </p>
+              <p className="text-charcoal-500 text-xs mt-1">Drag & drop or click to browse</p>
+              <p className="text-charcoal-700 text-xs mt-0.5">JPG, PNG, WEBP supported</p>
             </div>
-            <NeonButton variant="primary" size="sm" icon="📸">Browse Files</NeonButton>
+            <Button variant="outline" size="sm" icon="📸">Browse Image</Button>
           </div>
         </div>
       )}

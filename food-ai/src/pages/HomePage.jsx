@@ -2,138 +2,135 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import AIOrb from '../components/AIOrb';
-import GlassCard from '../components/GlassCard';
-import NeonButton from '../components/NeonButton';
-import ProductCard from '../components/ProductCard';
 import SearchBar from '../components/SearchBar';
+import Button from '../components/Button';
+import ProductCard from '../components/ProductCard';
+import SectionHeading from '../components/SectionHeading';
+import RatingStars from '../components/RatingStars';
+import logo from '../assets/logo.png';
 import { products } from '../data/products';
 
-const stagger = ({ delay = 0 }) => ({
-  initial: { opacity: 0, y: 30 },
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 28 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay },
+  transition: { duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] },
 });
 
 const HomePage = () => {
   const navigate = useNavigate();
 
   const features = [
-    { icon: '⚡', title: 'INSTANT ANALYSIS', desc: 'Health ratings in under 2 seconds. Real data, zero guesswork.', color: 'blue' },
-    { icon: '🎯', title: 'PERSONALIZED', desc: 'Your age, conditions, and goals shape every score.', color: 'purple' },
-    { icon: '🤖', title: 'AI SCANNER', desc: 'Point. Scan. Know. Our AI reads labels instantly.', color: 'green' },
-    { icon: '💊', title: 'CONDITION AWARE', desc: 'Diabetes? BP? Heart? We factor your health in.', color: 'yellow' },
+    { icon: '★', title: 'Verified Ratings',      desc: 'Evidence-based health scores for every product.',       color: 'text-gold' },
+    { icon: '🧬', title: 'Personalized Insights', desc: 'Scores tailored to your age, conditions & goals.',      color: 'text-purple-400' },
+    { icon: '📸', title: 'Smart Scan',            desc: 'Upload a packet image. AI reads it instantly.',         color: 'text-blue-400' },
+    { icon: '⚡', title: 'Fast Results',           desc: 'Understand your food in seconds — not hours.',          color: 'text-green-400' },
+  ];
+
+  const testimonials = [
+    { name: 'Priya S.', text: 'Finally I know which biscuits are safe for my diabetic father.', rating: 5 },
+    { name: 'Arjun M.', text: 'The personalized score changed how I read food labels forever.', rating: 5 },
+    { name: 'Kavya R.', text: 'Scanned Maggi in 3 seconds. The breakdown was eye-opening.', rating: 4.5 },
   ];
 
   return (
     <div className="min-h-screen">
       {/* ── Hero ── */}
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-4 pt-20">
-        {/* Background radial glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%)' }} />
-          <div className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%)' }} />
+        {/* Background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1e1a0e] via-charcoal-900 to-charcoal DEFAULT" />
+        <div className="absolute inset-0"
+          style={{ backgroundImage:"radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,175,55,0.08) 0%, transparent 60%)" }}
+        />
+
+        {/* Decorative gold rings */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+          <div className="w-[500px] h-[500px] rounded-full border border-gold/5" />
+          <div className="absolute inset-8 rounded-full border border-gold/5" />
         </div>
 
-        {/* Top HUD bar */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="flex items-center gap-4 mb-10"
-        >
-          <span className="flex items-center gap-2 text-xs font-mono text-neon-blue/70 border border-neon-blue/20 px-3 py-1.5 rounded-full glass">
-            <span className="w-1.5 h-1.5 bg-safe rounded-full animate-pulse" />
-            SYSTEM ONLINE · LAB MODE ACTIVE
-          </span>
-          <span className="text-xs font-mono text-gray-700 border border-lab-border px-3 py-1.5 rounded-full glass">
-            🏆 HACKATHON 2026
-          </span>
-        </motion.div>
+        {/* Content */}
+        <div className="relative z-10 text-center max-w-4xl mx-auto">
+          {/* Logo */}
+          <motion.div {...fadeUp(0)} className="flex justify-center mb-6">
+            <img
+              src={logo}
+              alt="ValidEats"
+              className="h-24 md:h-32 w-auto object-contain animate-float"
+              onError={(e) => { e.target.style.display='none'; }}
+            />
+          </motion.div>
 
-        {/* AI Orb */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, type: 'spring' }}
-          className="mb-10"
-        >
-          <AIOrb size="xl" label="VALIDEATS AI" sublabel="Health Simulation Engine v2.0" />
-        </motion.div>
+          {/* Badge */}
+          <motion.div {...fadeUp(0.1)} className="flex justify-center mb-5">
+            <span className="inline-flex items-center gap-2 border border-gold/30 text-gold/80 text-xs tracking-widest uppercase px-4 py-2 rounded-full bg-gold/5">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+              Verified Star Rating System · 2026
+            </span>
+          </motion.div>
 
-        {/* Headline */}
-        <motion.div {...stagger({ delay: 0.3 })} className="text-center max-w-4xl">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight text-white">
-            We don't rate food.<br />
-            <span className="gradient-text">We simulate its effect</span><br />
-            on <span className="neon-text-green">YOU.</span>
-          </h1>
-          <p className="mt-6 text-gray-400 font-mono text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-            ValidEats AI Lab analyzes packaged food based on your personal health profile.
-            Enter the lab. Understand your food. Protect your body.
-          </p>
-        </motion.div>
+          {/* Headline */}
+          <motion.div {...fadeUp(0.2)}>
+            <h1 className="serif-heading text-5xl md:text-7xl font-black text-white leading-[1.05] mb-5">
+              Eat Smart.<br />
+              <span className="gold-text">Live Better.</span>
+            </h1>
+            <p className="text-charcoal-300 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
+              Understand how your food truly affects you. <br className="hidden md:block" />
+              Not generic advice — personalized health intelligence.
+            </p>
+          </motion.div>
 
-        {/* Search */}
-        <motion.div {...stagger({ delay: 0.4 })} className="w-full max-w-xl mt-8">
-          <SearchBar
-            onSelect={(p) => navigate(`/result/${p.id}`)}
-            placeholder="SCAN PRODUCT DATABASE..."
-          />
-        </motion.div>
+          {/* Search */}
+          <motion.div {...fadeUp(0.3)} className="mt-8 w-full max-w-xl mx-auto">
+            <SearchBar
+              onSelect={(p) => navigate(`/result/${p.id}`)}
+              placeholder="Search any packaged food..."
+            />
+          </motion.div>
 
-        {/* CTA Buttons */}
-        <motion.div {...stagger({ delay: 0.5 })} className="flex flex-wrap items-center justify-center gap-4 mt-8">
-          <Link to="/general-rating">
-            <NeonButton variant="primary" size="lg" icon="📊">Lab Analysis</NeonButton>
-          </Link>
-          <Link to="/personalized">
-            <NeonButton variant="purple" size="lg" icon="🎯">DNA Mode</NeonButton>
-          </Link>
-          <Link to="/scan">
-            <NeonButton variant="solid" size="lg" icon="🤖">AI Scanner</NeonButton>
-          </Link>
-        </motion.div>
+          {/* CTA buttons */}
+          <motion.div {...fadeUp(0.4)} className="flex flex-wrap items-center justify-center gap-4 mt-6">
+            <Link to="/general-rating">
+              <Button variant="gold" size="lg" icon="★">General Rating</Button>
+            </Link>
+            <Link to="/personalized">
+              <Button variant="outline" size="lg" icon="🧬">Personalized Rating</Button>
+            </Link>
+            <Link to="/scan">
+              <Button variant="dark" size="lg" icon="📸">Scan & Rate</Button>
+            </Link>
+          </motion.div>
 
-        {/* Stats row */}
-        <motion.div {...stagger({ delay: 0.6 })} className="flex flex-wrap items-center justify-center gap-8 mt-12">
-          {[
-            { val: '10+', label: 'Products in DB' },
-            { val: '03', label: 'Analysis Modes' },
-            { val: '∞', label: 'Health Combos' },
-            { val: 'AI', label: 'Powered Core' },
-          ].map((s) => (
-            <div key={s.label} className="text-center">
-              <p className="font-mono font-black text-2xl gradient-text">{s.val}</p>
-              <p className="font-mono text-xs text-gray-600 uppercase tracking-widest mt-0.5">{s.label}</p>
-            </div>
-          ))}
-        </motion.div>
+          {/* Trust row */}
+          <motion.div {...fadeUp(0.5)} className="flex flex-wrap items-center justify-center gap-6 mt-10 text-charcoal-500 text-xs">
+            {['10+ products rated', '3 analysis modes', 'AI-powered insights', 'Free to use'].map((t) => (
+              <span key={t} className="flex items-center gap-1.5">
+                <span className="text-gold">✓</span>
+                {t}
+              </span>
+            ))}
+          </motion.div>
+        </div>
 
-        {/* Scroll indicator */}
+        {/* Scroll arrow */}
         <motion.div
           animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-8 flex flex-col items-center gap-2 text-gray-700"
+          transition={{ duration: 2.5, repeat: Infinity }}
+          className="absolute bottom-8 flex flex-col items-center gap-2 text-charcoal-600"
         >
-          <p className="font-mono text-xs uppercase tracking-widest">Scroll to explore</p>
-          <div className="w-px h-8 bg-gradient-to-b from-neon-blue/50 to-transparent" />
+          <div className="w-px h-12 bg-gradient-to-b from-transparent via-gold/30 to-gold/60" />
         </motion.div>
       </section>
 
-      {/* ── Feature Cards ── */}
-      <section className="section-pad">
-        <div className="max-w-7xl mx-auto">
-          {/* Section header */}
-          <div className="flex items-center gap-4 mb-10">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-neon-blue/20" />
-            <p className="hud-label">System Capabilities</p>
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-neon-blue/20" />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* ── Features ── */}
+      <section className="section-py bg-charcoal-900">
+        <div className="max-w-6xl mx-auto px-4 md:px-8">
+          <SectionHeading
+            label="Why ValidEats"
+            title="More than a food label."
+            subtitle="We translate complex nutritional data into clear, actionable health intelligence."
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-12">
             {features.map((f, i) => (
               <motion.div
                 key={f.title}
@@ -141,170 +138,132 @@ const HomePage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
+                className="premium-card p-6 text-center"
               >
-                <GlassCard color={f.color} className="h-full">
-                  <div className={`w-12 h-12 rounded-xl mb-4 flex items-center justify-center text-2xl
-                    ${f.color === 'blue' ? 'bg-neon-blue/10 border border-neon-blue/30' :
-                      f.color === 'purple' ? 'bg-neon-purple/10 border border-neon-purple/30' :
-                      f.color === 'green' ? 'bg-safe/10 border border-safe/30' :
-                      'bg-caution/10 border border-caution/30'}`}>
-                    {f.icon}
-                  </div>
-                  <p className="font-mono font-bold text-xs uppercase tracking-widest text-gray-200 mb-2">{f.title}</p>
-                  <p className="font-mono text-xs text-gray-500 leading-relaxed">{f.desc}</p>
-                </GlassCard>
+                <div className={`text-3xl mb-4 ${f.color}`}>{f.icon}</div>
+                <h3 className="text-gray-200 font-semibold text-sm mb-2">{f.title}</h3>
+                <p className="text-charcoal-400 text-sm leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── How it works ── */}
-      <section className="section-pad">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-4 mb-10">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-neon-blue/20" />
-            <p className="hud-label">Protocol Steps</p>
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-neon-blue/20" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* ── How It Works ── */}
+      <section className="section-py">
+        <div className="max-w-6xl mx-auto px-4 md:px-8">
+          <SectionHeading label="Process" title="Three ways to analyze." subtitle="Choose the method that fits your need." />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
             {[
-              { n: '01', icon: '🔍', title: 'Select Product', desc: 'Choose from our curated food database or scan a packet image.' },
-              { n: '02', icon: '📊', title: 'Input Your Profile', desc: 'Age, health conditions, and how often you eat it — we need it all.' },
-              { n: '03', icon: '🧠', title: 'AI Generates Score', desc: 'Get a personalized health simulation result with warnings and guidance.' },
-            ].map((s, i) => (
+              { n: '01', icon: '★', title: 'General Rating',     path: '/general-rating', desc: 'Select a product and age group. Get a star rating with detailed health explanation.', cta: 'Try General Rating', variant: 'gold' },
+              { n: '02', icon: '🧬', title: 'Personalized',       path: '/personalized',   desc: 'Enter your age, weight, health conditions. Get a rating built exactly for your biology.', cta: 'Start Personalized', variant: 'outline' },
+              { n: '03', icon: '📸', title: 'Scan & Rate',        path: '/scan',           desc: 'Upload a packet photo. Our AI reads the label and generates an instant health score.', cta: 'Launch Scanner', variant: 'dark' },
+            ].map((step, i) => (
               <motion.div
-                key={s.n}
+                key={step.n}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
-                className="relative glass border border-lab-border rounded-xl p-6 text-center"
+                transition={{ delay: i * 0.12 }}
+                className="premium-card p-7 flex flex-col"
               >
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-neon-blue text-lab-bg text-xs font-mono font-bold px-3 py-0.5 rounded-full">
-                  STEP {s.n}
+                <div className="flex items-center gap-3 mb-5">
+                  <span className="text-gold/40 text-xs font-medium tracking-widest">{step.n}</span>
+                  <div className="h-px flex-1 bg-charcoal-800" />
                 </div>
-                <div className="w-16 h-16 bg-lab-surface border border-lab-border rounded-xl flex items-center justify-center text-3xl mx-auto mt-3 mb-4">
-                  {s.icon}
-                </div>
-                <h3 className="font-mono font-bold text-sm text-gray-200 mb-2 uppercase tracking-wider">{s.title}</h3>
-                <p className="font-mono text-xs text-gray-500 leading-relaxed">{s.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 3 Feature Sections ── */}
-      <section className="section-pad">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-4 mb-10">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-neon-blue/20" />
-            <p className="hud-label">Lab Modules</p>
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-neon-blue/20" />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {[
-              {
-                path: '/general-rating', icon: '📊', color: 'blue',
-                code: 'MODULE 01',
-                title: 'Lab Analysis Mode',
-                desc: 'Standard food rating by age group. Understand how a snack affects kids vs adults vs seniors.',
-                cta: 'Enter Lab',
-              },
-              {
-                path: '/personalized', icon: '🎯', color: 'purple',
-                code: 'MODULE 02',
-                title: 'DNA Simulation Mode',
-                desc: 'Input your complete health profile — diabetes, BP, obesity, fitness — and get a rating built for you.',
-                cta: 'Start Simulation',
-              },
-              {
-                path: '/scan', icon: '🤖', color: 'green',
-                code: 'MODULE 03',
-                title: 'AI Scanner',
-                desc: 'Upload or take a photo of any food packet. Our AI decodes the label and generates an instant health score.',
-                cta: 'Launch Scanner',
-              },
-            ].map((m) => (
-              <GlassCard key={m.path} color={m.color} className="flex flex-col" hover>
-                <p className="hud-label mb-2">{m.code}</p>
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4
-                  ${m.color === 'blue' ? 'bg-neon-blue/10 border border-neon-blue/30' :
-                    m.color === 'purple' ? 'bg-neon-purple/10 border border-neon-purple/30' :
-                    'bg-safe/10 border border-safe/30'}`}>
-                  {m.icon}
-                </div>
-                <h3 className="font-mono font-bold text-sm text-gray-100 uppercase tracking-wider mb-3">{m.title}</h3>
-                <p className="font-mono text-xs text-gray-500 leading-relaxed flex-1 mb-5">{m.desc}</p>
-                <Link to={m.path}>
-                  <NeonButton variant={m.color === 'blue' ? 'primary' : m.color === 'purple' ? 'purple' : 'green'} fullWidth size="md" iconRight="→">
-                    {m.cta}
-                  </NeonButton>
+                <div className="text-3xl mb-4">{step.icon}</div>
+                <h3 className="serif-heading text-xl font-bold text-white mb-3">{step.title}</h3>
+                <p className="text-charcoal-400 text-sm leading-relaxed flex-1 mb-6">{step.desc}</p>
+                <Link to={step.path}>
+                  <Button variant={step.variant} fullWidth size="md" iconRight="→">{step.cta}</Button>
                 </Link>
-              </GlassCard>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* ── Sample Products ── */}
-      <section className="section-pad">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-4 mb-10">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-neon-blue/20" />
-            <p className="hud-label">Product Database</p>
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-neon-blue/20" />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="section-py bg-charcoal-900">
+        <div className="max-w-6xl mx-auto px-4 md:px-8">
+          <SectionHeading label="Database" title="Popular products rated." subtitle="From your favourite snacks to daily beverages." />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
             {products.slice(0, 8).map((p, i) => (
               <motion.div
                 key={p.id}
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.96 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
+                transition={{ delay: i * 0.06 }}
               >
-                <ProductCard product={p} onClick={() => navigate(`/result/${p.id}`)} />
+                <ProductCard product={p} showRating />
               </motion.div>
             ))}
           </div>
-
           <div className="text-center mt-8">
             <Link to="/general-rating">
-              <NeonButton variant="primary" size="lg" iconRight="→">View All Products</NeonButton>
+              <Button variant="outline" size="lg" iconRight="→">View All Products</Button>
             </Link>
           </div>
         </div>
       </section>
 
+      {/* ── Testimonials ── */}
+      <section className="section-py">
+        <div className="max-w-5xl mx-auto px-4 md:px-8">
+          <SectionHeading label="Feedback" title="What people say." />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-10">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={t.name}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="premium-card p-6"
+              >
+                <RatingStars stars={t.rating} size="sm" showNumber={false} className="mb-4" />
+                <p className="text-charcoal-300 text-sm leading-relaxed mb-4 italic">"{t.text}"</p>
+                <p className="text-charcoal-500 text-xs font-medium">— {t.name}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA ── */}
-      <section className="section-pad">
-        <div className="max-w-3xl mx-auto">
-          <div className="relative glass border border-neon-blue/20 rounded-2xl p-10 text-center overflow-hidden">
+      <section className="section-py">
+        <div className="max-w-3xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="relative rounded-3xl overflow-hidden bg-charcoal-900 border border-gold/20 p-10 md:p-16 text-center"
+            style={{ background: 'linear-gradient(135deg, #1a160a, #0F0F0F)' }}
+          >
             <div className="absolute inset-0 pointer-events-none"
-              style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0,212,255,0.05) 0%, transparent 70%)' }} />
+              style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 60%)' }} />
             <div className="relative">
-              <AIOrb size="sm" label="" sublabel="" />
-              <h2 className="text-3xl md:text-4xl font-black text-white mt-6 mb-3">
-                Enter the <span className="gradient-text">Lab.</span>
+              <div className="flex justify-center mb-6">
+                <img src={logo} alt="ValidEats" className="h-16 w-auto opacity-80"
+                  onError={(e) => { e.target.style.display='none'; }} />
+              </div>
+              <h2 className="serif-heading text-3xl md:text-4xl font-bold text-white mb-3">
+                Know what you're eating.
               </h2>
-              <p className="text-gray-500 font-mono text-sm mb-8">
-                Your food. Your health. Your data. One scan at a time.
+              <p className="text-charcoal-400 text-sm leading-relaxed max-w-md mx-auto mb-8">
+                Start with a scan. Get answers in seconds. Make food decisions you'll feel good about.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Link to="/scan">
-                  <NeonButton variant="solid" size="xl" icon="🤖">Launch AI Scanner</NeonButton>
+                  <Button variant="gold" size="xl" icon="📸">Scan a Product</Button>
                 </Link>
                 <Link to="/personalized">
-                  <NeonButton variant="primary" size="xl" icon="🎯">Start DNA Mode</NeonButton>
+                  <Button variant="outline" size="xl" icon="🧬">Get Personalized Rating</Button>
                 </Link>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
     </div>

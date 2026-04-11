@@ -2,171 +2,154 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import GlassCard from '../components/GlassCard';
-import NeonButton from '../components/NeonButton';
-import AIOrb from '../components/AIOrb';
+import SectionHeading from '../components/SectionHeading';
+import Button from '../components/Button';
+import logo from '../assets/logo.png';
 
 const AboutPage = () => {
   const modules = [
     {
-      n: '01', color: 'blue', icon: '📊',
-      title: 'Lab Analysis Mode',
-      desc: 'Select any packaged food. Choose an age group. Our system scores it based on nutritional data and returns a health verdict with warnings and safe frequencies.',
-      steps: ['Select product from database', 'Choose target age group', 'View star rating + explanation', 'See consume/avoid suggestion'],
+      icon: '★', color: 'text-gold', border: 'border-gold/20', bg: 'bg-gold/5',
+      title: 'General Rating',
+      how: 'Select any packaged food and an age group. ValidEats cross-references the nutritional profile against age-specific health guidelines and returns an evidence-based star rating from 1 to 5.',
+      steps: ['Select product from database', 'Choose target age group (kids, teens, adults, seniors)', 'Receive star rating and health explanation', 'View consume / avoid recommendation'],
     },
     {
-      n: '02', color: 'purple', icon: '🧬',
-      title: 'DNA Simulation Mode',
-      desc: 'The most powerful feature. Input your age, weight, health conditions (diabetes, BP, obesity, heart, fitness) and how often you eat a product. AI generates a score built only for you.',
-      steps: ['Enter full health profile', 'Select target product', 'AI adjusts score for your conditions', 'Get personalized warnings & guidance'],
+      icon: '🧬', color: 'text-purple-400', border: 'border-purple-400/20', bg: 'bg-purple-400/5',
+      title: 'Personalized Rating',
+      how: 'We go beyond the label. Enter your age, height, weight, gender, and health conditions. Our algorithm adjusts sugar, sodium, fat, and calorie thresholds based on your profile to produce a score that is uniquely yours.',
+      steps: ['Complete your health profile', 'Select the food product', 'AI adjusts score for your conditions', 'Compare: General rating vs. Your personal rating'],
     },
     {
-      n: '03', color: 'green', icon: '🤖',
-      title: 'AI Scanner',
-      desc: 'Upload a food packet photo. The AI reads the nutrition label, extracts ingredients and nutritional data, and generates a health score. Ready for ML model integration.',
-      steps: ['Upload packet image', 'AI reads nutrition label', 'Extracts and validates data', 'Health score generated with alternatives'],
+      icon: '📸', color: 'text-blue-400', border: 'border-blue-400/20', bg: 'bg-blue-400/5',
+      title: 'Scan & Rate',
+      how: 'Take a photo of any food packet. Our AI reads the nutrition table and ingredients list, extracts meaningful data, flags harmful additives, and produces an instant health score — no typing needed.',
+      steps: ['Upload packet image (front or back)', 'AI reads the nutrition label', 'Ingredients and additives flagged', 'Health score, warnings, and alternatives shown'],
     },
   ];
 
   return (
     <div className="min-h-screen pt-24 pb-16">
-      <div className="max-w-5xl mx-auto px-4 md:px-8 space-y-16">
+      <div className="max-w-4xl mx-auto px-4 md:px-8 space-y-20">
 
         {/* Hero */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-          <div className="flex justify-center mb-8">
-            <AIOrb size="md" label="SYSTEM INFO" sublabel="Module Documentation" />
+          <div className="flex justify-center mb-6">
+            <img src={logo} alt="ValidEats" className="h-20 w-auto opacity-90"
+              onError={(e) => { e.target.style.display = 'none'; }} />
           </div>
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <span className="w-2 h-2 bg-safe rounded-full animate-pulse" />
-            <span className="hud-label">About</span>
-          </div>
-          <h1 className="text-4xl md:text-6xl font-black text-white mb-5">
-            About <span className="gradient-text">ValidEats</span>
-          </h1>
-          <p className="text-gray-500 font-mono text-sm max-w-2xl mx-auto leading-relaxed">
-            ValidEats is a health-tech AI lab designed to help people understand how packaged food
-            affects their specific biology. Not generic info — a simulation built for YOU.
-          </p>
+          <SectionHeading
+            label="About ValidEats"
+            title="The Michelin Guide for Everyday Food."
+            subtitle="ValidEats is a health-intelligence platform that helps people understand exactly how a packaged food product affects their specific body — not just in general, but personally."
+          />
         </motion.div>
 
-        {/* Problem / Solution / Goal */}
+        {/* Mission stats */}
         <section>
-          <div className="flex items-center gap-4 mb-8">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-neon-blue/20" />
-            <p className="hud-label">System Rationale</p>
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-neon-blue/20" />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {[
-              { n: '01', color: 'red',    icon: '🤔', title: 'The Problem',   text: 'Food labels are confusing. Health impact varies by person. No tool personalizes nutrition science for everyday people.' },
-              { n: '02', color: 'blue',   icon: '💡', title: 'Our Solution',  text: 'ValidEats translates complex nutrition into a simple, personalized health score — in seconds, for anyone.' },
-              { n: '03', color: 'green',  icon: '🎯', title: 'The Impact',    text: 'Empowering patients, parents, seniors, and fitness users with food intelligence that actually applies to them.' },
-            ].map((c, i) => (
-              <motion.div key={c.n} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-                <GlassCard color={c.color} className="h-full">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs font-mono text-gray-600">[{c.n}]</span>
-                    <span className="text-2xl">{c.icon}</span>
-                  </div>
-                  <p className="font-mono font-bold text-xs uppercase tracking-widest text-gray-200 mb-2">{c.title}</p>
-                  <p className="font-mono text-xs text-gray-500 leading-relaxed">{c.text}</p>
-                </GlassCard>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* How Each Module Works */}
-        <section>
-          <div className="flex items-center gap-4 mb-8">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-neon-blue/20" />
-            <p className="hud-label">Module Documentation</p>
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-neon-blue/20" />
-          </div>
-
-          <div className="space-y-5">
-            {modules.map((m, i) => (
-              <motion.div key={m.n} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-                <GlassCard color={m.color} padding={false}>
-                  <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="text-xs font-mono text-gray-600">MODULE {m.n}</span>
-                        <span className="text-2xl">{m.icon}</span>
-                      </div>
-                      <h3 className="font-mono font-bold text-lg text-gray-200 uppercase tracking-wider mb-3">{m.title}</h3>
-                      <p className="font-mono text-xs text-gray-500 leading-relaxed">{m.desc}</p>
-                    </div>
-                    <div>
-                      <p className="hud-label mb-3">Protocol Steps</p>
-                      <ol className="space-y-2">
-                        {m.steps.map((step, si) => (
-                          <li key={step} className="flex items-start gap-3 text-xs font-mono text-gray-600">
-                            <span className={`font-bold ${m.color === 'blue' ? 'text-neon-blue' : m.color === 'purple' ? 'text-neon-purple' : 'text-safe'}`}>
-                              0{si + 1}.
-                            </span>
-                            {step}
-                          </li>
-                        ))}
-                      </ol>
-                    </div>
-                  </div>
-                </GlassCard>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* Tech Stack */}
-        <section>
-          <div className="flex items-center gap-4 mb-8">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-neon-blue/20" />
-            <p className="hud-label">Tech Stack</p>
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-neon-blue/20" />
-          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { icon: '⚛️', label: 'React + Vite', sub: 'Frontend Framework' },
-              { icon: '🎨', label: 'Tailwind CSS', sub: 'Styling System' },
-              { icon: '🎬', label: 'Framer Motion', sub: 'Animations' },
-              { icon: '🤖', label: 'AI-Ready', sub: 'API Integration Ready' },
-            ].map((t) => (
-              <GlassCard key={t.label} className="text-center py-6">
-                <p className="text-3xl mb-2">{t.icon}</p>
-                <p className="font-mono font-bold text-xs text-gray-200 uppercase tracking-wider">{t.label}</p>
-                <p className="font-mono text-xs text-gray-600 mt-1">{t.sub}</p>
-              </GlassCard>
+              { val: '10+', label: 'Products Rated' },
+              { val: '3', label: 'Analysis Modes' },
+              { val: '∞', label: 'Health Profiles' },
+              { val: 'AI', label: 'Powered Engine' },
+            ].map((s, i) => (
+              <motion.div key={s.label}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="premium-card p-6 text-center">
+                <p className="gold-text serif-heading text-3xl font-bold mb-1">{s.val}</p>
+                <p className="text-charcoal-400 text-xs font-medium">{s.label}</p>
+              </motion.div>
             ))}
           </div>
         </section>
 
-        {/* For Judges */}
+        {/* Why ValidEats */}
         <section>
-          <div className="relative glass border border-neon-blue/20 rounded-2xl p-8 text-center overflow-hidden">
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(0,212,255,0.05) 0%, transparent 60%)' }} />
-            <div className="relative">
-              <span className="text-xs font-mono text-neon-blue/60 border border-neon-blue/20 px-3 py-1 rounded-full mb-4 inline-block">
-                ◈ For Judges & Evaluators
-              </span>
-              <h2 className="text-2xl font-black text-white mb-3">Hackathon Ready. Production Capable.</h2>
-              <p className="text-gray-500 font-mono text-sm max-w-2xl mx-auto leading-relaxed mb-6">
-                ValidEats is a full-stack-ready frontend. All components are modular and reusable. Data layer is separated with API stubs (utils/api.js) ready for backend integration. The scan feature is architecturally prepared for a real ML vision model.
-              </p>
-              <div className="flex flex-wrap justify-center gap-3 mb-6">
-                {['React + Vite', 'Tailwind CSS v3', 'Framer Motion', 'AI-Ready Arch', 'Fully Responsive', 'Clean Code'].map((tag) => (
-                  <span key={tag} className="text-xs font-mono border border-neon-blue/20 text-neon-blue/60 px-3 py-1 rounded">{tag}</span>
-                ))}
-              </div>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Link to="/scan"><NeonButton variant="solid" icon="🤖">Try AI Scanner</NeonButton></Link>
-                <Link to="/personalized"><NeonButton variant="purple" icon="🧬">Try DNA Mode</NeonButton></Link>
-              </div>
-            </div>
+          <SectionHeading label="Why We Built This" title="Food is personal. Ratings should be too." />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-10">
+            {[
+              { icon: '🤔', title: 'The Problem',  text: 'Food labels are complicated. "Is this safe for me?" shouldn\'t require a nutrition degree. Generic ratings ignore your age, weight, and health conditions.' },
+              { icon: '💡', title: 'Our Approach', text: 'We built an engine that adapts to your health profile. The same snack can be safe for a 25-year-old and harmful for a diabetic senior.' },
+              { icon: '🎯', title: 'Our Mission',  text: 'Give every person — patient, parent, athlete or senior — the clarity to make confident food decisions every single day.' },
+            ].map((c, i) => (
+              <motion.div key={c.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="premium-card p-6">
+                <p className="text-3xl mb-4">{c.icon}</p>
+                <h3 className="serif-heading text-lg font-bold text-white mb-2">{c.title}</h3>
+                <p className="text-charcoal-400 text-sm leading-relaxed">{c.text}</p>
+              </motion.div>
+            ))}
           </div>
         </section>
 
+        {/* Module breakdown */}
+        <section>
+          <SectionHeading label="How It Works" title="Three ways to know your food." />
+          <div className="space-y-5 mt-10">
+            {modules.map((m, i) => (
+              <motion.div key={m.title}
+                initial={{ opacity: 0, x: -16 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className={`premium-card border ${m.border} overflow-hidden`}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+                  <div className={`p-7 ${m.bg}`}>
+                    <div className={`text-3xl mb-3 ${m.color}`}>{m.icon}</div>
+                    <h3 className="serif-heading text-xl font-bold text-white mb-3">{m.title}</h3>
+                    <p className="text-charcoal-400 text-sm leading-relaxed">{m.how}</p>
+                  </div>
+                  <div className="p-7 border-t md:border-t-0 md:border-l border-charcoal-800">
+                    <p className="text-gold text-xs font-medium uppercase tracking-wider mb-4">Process</p>
+                    <ol className="space-y-2.5">
+                      {m.steps.map((step, si) => (
+                        <li key={step} className="flex items-start gap-3 text-sm">
+                          <span className={`font-bold flex-shrink-0 w-5 mt-0.5 ${m.color}`}>{si + 1}.</span>
+                          <span className="text-charcoal-400">{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* For hackathon judges */}
+        <section>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="rounded-3xl overflow-hidden p-8 md:p-10 text-center border border-gold/20"
+            style={{ background: 'linear-gradient(135deg, #1a160a, #0F0F0F)' }}>
+            <span className="inline-block text-gold text-xs font-medium tracking-widest uppercase border border-gold/30 px-4 py-1.5 rounded-full mb-6">
+              For Judges & Evaluators
+            </span>
+            <h2 className="serif-heading text-3xl font-bold text-white mb-3">Hackathon-ready. Production-capable.</h2>
+            <p className="text-charcoal-400 text-sm leading-relaxed max-w-xl mx-auto mb-6">
+              ValidEats is a fully modular React + Vite frontend with a clean data layer designed for easy backend integration. All API calls are in <code className="bg-charcoal-800 px-1.5 py-0.5 rounded text-gold text-xs">src/utils/api.js</code> — replace the dummy functions with real endpoints and it works.
+            </p>
+            <div className="flex flex-wrap justify-center gap-2 mb-6">
+              {['React + Vite', 'Tailwind CSS v3', 'Framer Motion', 'Modular Architecture', 'API-ready', 'Mobile-first', 'Production Quality'].map((tag) => (
+                <span key={tag} className="text-xs border border-gold/20 text-gold/60 px-3 py-1 rounded-full">{tag}</span>
+              ))}
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link to="/scan"><Button variant="gold" icon="📸">Try AI Scanner</Button></Link>
+              <Link to="/personalized"><Button variant="outline" icon="🧬">Try Personalized Mode</Button></Link>
+            </div>
+          </motion.div>
+        </section>
       </div>
     </div>
   );

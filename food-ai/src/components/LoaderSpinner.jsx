@@ -1,43 +1,32 @@
 // src/components/LoaderSpinner.jsx
 import React from 'react';
+import { motion } from 'framer-motion';
 
-const LoaderSpinner = ({
-  size = 'md',
-  color = 'primary',
-  label,
-  fullScreen = false,
-  className = '',
-}) => {
-  const sizeMap = {
-    sm: 'w-5 h-5 border-2',
-    md: 'w-8 h-8 border-2',
-    lg: 'w-12 h-12 border-3',
-    xl: 'w-16 h-16 border-4',
-  };
+const LoaderSpinner = ({ label = 'Loading...', size = 'md' }) => {
+  const s = { sm: 32, md: 48, lg: 64 }[size] || 48;
 
-  const colorMap = {
-    primary: 'border-primary/30 border-t-primary',
-    safe: 'border-safe/30 border-t-safe',
-    caution: 'border-caution/30 border-t-caution',
-    white: 'border-white/30 border-t-white',
-  };
-
-  const spinner = (
-    <div className={`flex flex-col items-center gap-3 ${className}`}>
-      <div className={`rounded-full animate-spin ${sizeMap[size]} ${colorMap[color]}`} />
-      {label && <p className="text-text-secondary text-sm font-medium">{label}</p>}
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <div className="relative" style={{ width: s, height: s }}>
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          style={{ border: '2px solid rgba(212,175,55,0.15)', borderTopColor: '#D4AF37' }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+        />
+        <motion.div
+          className="absolute rounded-full"
+          style={{ inset: 8, border: '1px solid rgba(212,175,55,0.1)', borderBottomColor: 'rgba(212,175,55,0.5)' }}
+          animate={{ rotate: -360 }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+        />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-1.5 h-1.5 rounded-full bg-gold opacity-80" />
+        </div>
+      </div>
+      {label && <p className="text-charcoal-400 text-xs font-medium tracking-wide">{label}</p>}
     </div>
   );
-
-  if (fullScreen) {
-    return (
-      <div className="fixed inset-0 bg-surface/80 backdrop-blur-sm z-50 flex items-center justify-center">
-        {spinner}
-      </div>
-    );
-  }
-
-  return spinner;
 };
 
 export default LoaderSpinner;
