@@ -80,7 +80,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-3">
             <Link to="/scan"
               className="flex items-center gap-2 bg-gold text-charcoal-900 font-medium text-sm px-5 py-2.5 rounded-xl
-                hover:bg-gold-light transition-all duration-200 shadow-gold hover:shadow-gold-hover">
+                hover:bg-gold-light transition-all duration-200">
               📸 Scan Now
             </Link>
           </div>
