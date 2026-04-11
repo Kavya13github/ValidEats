@@ -34,7 +34,7 @@ const NotFound = () => (
       <p className="text-6xl mb-4">★</p>
       <h1 className="serif-heading text-3xl font-bold text-white mb-2">Page Not Found</h1>
       <p className="text-charcoal-400 text-sm mb-8">This page doesn't exist. Let's get you back on track.</p>
-      <Link to="/" className="inline-flex items-center gap-2 bg-gold text-charcoal-900 font-medium text-sm px-6 py-3 rounded-xl hover:bg-gold-light transition-colors shadow-gold">
+      <Link to="/" className="inline-flex items-center gap-2 bg-gold text-charcoal-900 font-medium text-sm px-6 py-3 rounded-xl hover:bg-gold-light transition-colors">
         Return Home
       </Link>
     </div>
