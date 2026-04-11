@@ -1,12 +1,13 @@
-// src/pages/HomePage.jsx
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import SearchBar from '../components/SearchBar';
 import Button from '../components/Button';
 import ProductCard from '../components/ProductCard';
 import RatingStars from '../components/RatingStars';
 import FloatingOrbs from '../components/FloatingOrbs';
+const HeroScene   = React.lazy(() => import('../components/HeroScene'));
+const Page3DAccent = React.lazy(() => import('../components/Page3DAccent'));
 import logo from '../assets/logo.png';
 import { products } from '../data/products';
 
@@ -56,7 +57,14 @@ const HomePage = () => {
         <FloatingOrbs variant="hero" />
         <div className="absolute inset-0 grid-bg opacity-60 pointer-events-none" />
 
-        <div className="relative z-10 text-center max-w-4xl mx-auto">
+        {/* 3D Scene — fills entire hero, sits behind content */}
+        <div className="absolute inset-0 flex items-center justify-center z-[1] pointer-events-none">
+          <Suspense fallback={null}>
+            <HeroScene />
+          </Suspense>
+        </div>
+
+        <div className="relative z-10 text-center max-w-4xl mx-auto pt-4">
 
           {/* Logo */}
           <motion.div
@@ -167,6 +175,12 @@ const HomePage = () => {
             <h2 className="section-title mb-4">More than a food label.</h2>
             <p className="text-muted max-w-xl mx-auto">We translate complex nutritional data into simple, personalised, actionable health intelligence.</p>
           </motion.div>
+          {/* 3D accent */}
+          <div className="flex justify-center mb-10">
+            <Suspense fallback={null}>
+              <Page3DAccent variant="ring" size={130} />
+            </Suspense>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {features.map((f, i) => (
@@ -196,6 +210,12 @@ const HomePage = () => {
             <p className="label-sm mb-3">Process</p>
             <h2 className="section-title mb-4">Three ways to know your food.</h2>
           </motion.div>
+          {/* 3D accent */}
+          <div className="flex justify-center mb-10">
+            <Suspense fallback={null}>
+              <Page3DAccent variant="health" size={130} />
+            </Suspense>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[

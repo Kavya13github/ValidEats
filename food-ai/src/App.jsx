@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ToastProvider } from './components/Toast';
+import AnimatedBackground from './components/AnimatedBackground';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -47,6 +48,8 @@ const AppContent = () => {
   const location = useLocation();
   return (
     <div className="page-shell flex flex-col min-h-screen relative overflow-hidden">
+      {/* Global moving particle background */}
+      <AnimatedBackground />
       <div className="absolute inset-0 notion-grid pointer-events-none" />
       <Navbar />
       <main className="flex-1">
