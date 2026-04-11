@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const variants = {
-  gold: 'bg-gold text-charcoal-900 hover:bg-gold-light shadow-gold hover:shadow-gold-hover',
+  gold: 'bg-gold text-charcoal-900 hover:bg-gold-light',
   outline: 'border border-gold/50 text-gold hover:border-gold hover:bg-gold/5',
   ghost: 'text-gray-400 hover:text-white hover:bg-charcoal-700',
   dark: 'bg-charcoal-700 text-white border border-charcoal-600 hover:border-gold/30',
