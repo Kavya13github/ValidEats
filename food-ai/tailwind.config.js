@@ -27,15 +27,18 @@ export default {
         'risk-light':    'rgba(239,68,68,0.12)',
       },
       fontFamily: {
-        serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        sans:  ['Inter', 'system-ui', 'sans-serif'],
-        mono:  ['"JetBrains Mono"', 'monospace'],
+        sans:    ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        serif:   ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        elegant: ['"Italianno"', 'cursive'],
+        hand:    ['"Caveat"', 'cursive'],
+        mono:    ['"JetBrains Mono"', 'monospace'],
       },
       fontSize: {
-        'display': ['clamp(2.5rem,8vw,5.5rem)', { lineHeight: '1.05', fontWeight: '900', letterSpacing: '-0.03em' }],
-        'hero':    ['clamp(1.8rem,5vw,3.5rem)',  { lineHeight: '1.1',  fontWeight: '800', letterSpacing: '-0.02em' }],
-        'title':   ['clamp(1.4rem,3vw,2rem)',    { lineHeight: '1.2',  fontWeight: '700' }],
-        'body-lg': ['1.125rem',                  { lineHeight: '1.8' }],
+        'display': ['clamp(2.35rem,7vw,4.75rem)', { lineHeight: '1.04', fontWeight: '800', letterSpacing: '-0.045em' }],
+        'hero':    ['clamp(1.65rem,4.5vw,3rem)',  { lineHeight: '1.08', fontWeight: '800', letterSpacing: '-0.04em' }],
+        'title':   ['clamp(1.35rem,2.8vw,1.85rem)', { lineHeight: '1.15', fontWeight: '700', letterSpacing: '-0.03em' }],
+        'body-lg': ['1.0625rem',                   { lineHeight: '1.65', letterSpacing: '0.01em' }],
       },
       backgroundImage: {
         'gold-gradient': 'linear-gradient(135deg, #F0D060, #D4AF37, #A88A1A)',
@@ -60,6 +63,10 @@ export default {
         'popup':        '0 25px 80px rgba(0,0,0,0.8)',
       },
       animation: {
+        'food-drift-a': 'foodDriftA 22s ease-in-out infinite',
+        'food-drift-b': 'foodDriftB 26s ease-in-out infinite',
+        'food-drift-c': 'foodDriftC 20s ease-in-out infinite',
+        'aurora-pan':   'auroraPan 28s ease-in-out infinite alternate',
         'float-slow':  'floatSlow 8s ease-in-out infinite',
         'float-med':   'floatMed 6s ease-in-out infinite',
         'float-fast':  'floatFast 4s ease-in-out infinite',
@@ -135,6 +142,25 @@ export default {
           '0%':   { top: '-2px', opacity: 1 },
           '90%':  { opacity: 1 },
           '100%': { top: '100%', opacity: 0.3 },
+        },
+        foodDriftA: {
+          '0%,100%': { transform: 'translate(0, 0) rotate(0deg)' },
+          '33%':     { transform: 'translate(12px, -18px) rotate(8deg)' },
+          '66%':     { transform: 'translate(-8px, 10px) rotate(-6deg)' },
+        },
+        foodDriftB: {
+          '0%,100%': { transform: 'translate(0, 0) rotate(0deg) scale(1)' },
+          '50%':     { transform: 'translate(-14px, 16px) rotate(-10deg) scale(1.05)' },
+        },
+        foodDriftC: {
+          '0%,100%': { transform: 'translate(0, 0)' },
+          '25%':     { transform: 'translate(10px, 12px)' },
+          '50%':     { transform: 'translate(-6px, -14px)' },
+          '75%':     { transform: 'translate(14px, -8px)' },
+        },
+        auroraPan: {
+          '0%':   { backgroundPosition: '0% 50%, 100% 50%, 40% 100%' },
+          '100%': { backgroundPosition: '100% 40%, 0% 60%, 62% 18%' },
         },
       },
       borderRadius: {

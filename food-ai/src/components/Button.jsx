@@ -1,6 +1,8 @@
 // src/components/Button.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
+import { HiStar, HiCamera } from 'react-icons/hi2';
+import { FaDna } from 'react-icons/fa6';
 
 const styles = {
   gold:    'btn-gold text-brand-bg rounded-2xl',
@@ -15,6 +17,39 @@ const sizes = {
   md:  'px-5 py-2.5 text-sm gap-2',
   lg:  'px-7 py-3.5 text-base gap-2.5',
   xl:  'px-9 py-4 text-lg gap-3',
+};
+
+/** Same emoji strings as before — on gold we swap for dark SVGs so layout stays even. */
+const GOLD_ICON_MAP = {
+  '⭐': HiStar,
+  '📸': HiCamera,
+  '🧬': FaDna,
+};
+
+const goldIconPx = (size) => {
+  switch (size) {
+    case 'xs': return 14;
+    case 'sm': return 15;
+    case 'lg': return 20;
+    case 'xl': return 22;
+    default: return 18;
+  }
+};
+
+const renderGoldIcon = (glyph, size) => {
+  if (glyph == null) return null;
+  const Cmp = GOLD_ICON_MAP[glyph];
+  const px = goldIconPx(size);
+  if (!Cmp) {
+    return <span className="text-base leading-none relative z-[2]">{glyph}</span>;
+  }
+  return (
+    <Cmp
+      size={px}
+      className="shrink-0 relative z-[2] text-brand-bg"
+      aria-hidden
+    />
+  );
 };
 
 const Button = ({
@@ -44,9 +79,9 @@ const Button = ({
       </svg>
     ) : (
       <>
-        {icon && <span className="text-base leading-none">{icon}</span>}
-        <span>{children}</span>
-        {iconRight && <span className="text-base leading-none">{iconRight}</span>}
+        {icon && (variant === 'gold' ? renderGoldIcon(icon, size) : <span className="text-base leading-none">{icon}</span>)}
+        <span className="relative z-[2]">{children}</span>
+        {iconRight && (variant === 'gold' ? renderGoldIcon(iconRight, size) : <span className="text-base leading-none">{iconRight}</span>)}
       </>
     )}
   </motion.button>

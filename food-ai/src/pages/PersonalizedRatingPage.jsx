@@ -63,9 +63,9 @@ const PersonalizedRatingPage = () => {
   ];
 
   const steps = [
-    { n: 1, label: 'Your Profile',       icon: '👤' },
-    { n: 2, label: 'Health Info',        icon: '❤️' },
-    { n: 3, label: 'Select Product',     icon: '📦' },
+    { n: 1, label: 'You',     icon: '👤' },
+    { n: 2, label: 'Health',  icon: '❤️' },
+    { n: 3, label: 'Food',    icon: '📦' },
   ];
 
   return (
@@ -76,19 +76,22 @@ const PersonalizedRatingPage = () => {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 pt-24 pb-16">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <p className="label-sm mb-3">Personalized Rating</p>
-          <h1 className="serif text-[clamp(2rem,5vw,3.2rem)] font-black text-white mb-3">Your health. Your score.</h1>
-          <p className="text-muted text-lg max-w-xl">A rating built exactly for your body — not the average person.</p>
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+          <p className="type-hand-sm text-gold/85 mb-1 normal-case">your lane</p>
+          <h1 className="mb-2 leading-tight">
+            <span className="type-elegant text-[clamp(2.75rem,6vw,4rem)] text-white block sm:inline">Crafted for</span>
+            <span className="type-sans-pair text-[clamp(1.15rem,2.8vw,1.55rem)] text-slate-200 block sm:inline sm:ml-2 mt-1 sm:mt-0">your pulse.</span>
+          </h1>
+          <p className="type-hand-sm text-slate-500 max-w-md normal-case">same star language — just tuned to the body you actually live in.</p>
         </motion.div>
 
         {/* Step indicator */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          className="flex items-center gap-2 mb-8 overflow-x-auto pb-2">
+          className="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
           {steps.map((s, i) => (
             <React.Fragment key={s.n}>
-              <button onClick={() => setStep(s.n)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all duration-300 flex-shrink-0
+              <button type="button" onClick={() => setStep(s.n)}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold transition-all duration-300 flex-shrink-0
                   ${step === s.n ? 'border-gold/50 bg-gold/10 text-gold shadow-gold-sm' : 'border-white/10 bg-white/5 text-slate-500 hover:text-slate-300'}`}>
                 <span>{s.icon}</span> {s.label}
               </button>
@@ -110,10 +113,10 @@ const PersonalizedRatingPage = () => {
                   className="card-static p-7 rounded-3xl space-y-5">
                   <div className="flex items-center gap-3 mb-2">
                     <span className="step-num">1</span>
-                    <span className="text-slate-200 font-bold text-base">Your Profile</span>
+                    <span className="text-slate-200 font-bold text-sm">About you</span>
                   </div>
-                  <InputField label="Your Name (Optional)" name="name" value={form.name} onChange={set}
-                    placeholder="Helps personalise the result..." icon="👤" />
+                  <InputField label="Name (optional)" name="name" value={form.name} onChange={set}
+                    placeholder="Optional" icon="👤" />
                   <div className="grid grid-cols-2 gap-4">
                     <InputField label="Age" name="age" type="number" value={form.age} onChange={set}
                       placeholder="e.g. 28" required error={errors.age} helper="Years" />
@@ -126,7 +129,7 @@ const PersonalizedRatingPage = () => {
                     <InputField label="Weight (kg)" name="weight" type="number" value={form.weight} onChange={set}
                       placeholder="e.g. 60" helper="Optional" />
                   </div>
-                  <Button onClick={() => setStep(2)} fullWidth variant="outline" size="lg" iconRight="→">Continue to Health Info</Button>
+                  <Button onClick={() => setStep(2)} fullWidth variant="outline" size="lg" iconRight="→">Next</Button>
                 </motion.div>
               )}
 
@@ -135,7 +138,7 @@ const PersonalizedRatingPage = () => {
                   className="card-static p-7 rounded-3xl space-y-5">
                   <div className="flex items-center gap-3 mb-2">
                     <span className="step-num">2</span>
-                    <span className="text-slate-200 font-bold text-base">Health Conditions</span>
+                    <span className="text-slate-200 font-bold text-sm">Health</span>
                   </div>
                   <SelectField label="Primary Health Condition" name="healthCondition" value={form.healthCondition}
                     onChange={set} options={healthConditions} required error={errors.healthCondition}
@@ -150,7 +153,7 @@ const PersonalizedRatingPage = () => {
                   </div>
                   <div className="flex gap-3">
                     <Button onClick={() => setStep(1)} variant="ghost" size="md" icon="←" className="flex-1">Back</Button>
-                    <Button onClick={() => setStep(3)} variant="outline" size="md" iconRight="→" className="flex-1">Select Product</Button>
+                    <Button onClick={() => setStep(3)} variant="outline" size="md" iconRight="→" className="flex-1">Next</Button>
                   </div>
                 </motion.div>
               )}
@@ -160,10 +163,10 @@ const PersonalizedRatingPage = () => {
                   className="card-static p-7 rounded-3xl space-y-5">
                   <div className="flex items-center gap-3 mb-2">
                     <span className="step-num">3</span>
-                    <span className="text-slate-200 font-bold text-base">Choose Product</span>
+                    <span className="text-slate-200 font-bold text-sm">Food</span>
                   </div>
                   <SearchBar onSelect={(p) => { setProduct(p); setQuery(p.name); setErrors((e) => ({ ...e, product: '' })); toast.show(`${p.emoji} ${p.name} selected`, 'info', 1800); }}
-                    value={query} onChange={setQuery} placeholder="Search product..." />
+                    value={query} onChange={setQuery} placeholder="Search…" />
                   {errors.product && <AlertBox type="error" message={errors.product} />}
                   <AnimatePresence>
                     {product && (
@@ -252,7 +255,7 @@ const PersonalizedRatingPage = () => {
                   <div className="card rounded-3xl py-14 text-center border-dashed" style={{ borderColor: 'rgba(139,92,246,0.2)' }}>
                     <motion.span animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }} transition={{ duration: 4, repeat: Infinity }}
                       className="text-5xl block mb-4">🧬</motion.span>
-                    <p className="text-slate-300 font-bold text-base mb-1">Simulation Ready</p>
+                    <p className="text-slate-300 font-bold text-sm mb-1">Result here</p>
                     <p className="text-slate-600 text-sm">Complete the form to get your personalised rating</p>
                   </div>
                 </motion.div>

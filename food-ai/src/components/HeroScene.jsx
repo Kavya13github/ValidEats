@@ -1,9 +1,17 @@
 // src/components/HeroScene.jsx
-// React Three Fiber 3D scene for the home page hero
+// React Three Fiber — hero ring + abstract food-inspired 3D shapes
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { MeshDistortMaterial, Sphere, Torus, Octahedron, Float, Stars } from '@react-three/drei';
-import * as THREE from 'three';
+import {
+  MeshDistortMaterial,
+  Sphere,
+  Torus,
+  Octahedron,
+  Float,
+  Stars,
+  Cone,
+  Cylinder,
+} from '@react-three/drei';
 
 /* ── Animated golden torus ring ── */
 const GoldenRing = () => {
@@ -56,6 +64,77 @@ const GlowSphere = () => {
   );
 };
 
+/* ── Mini apple (abstract) ── */
+const MiniApple = () => (
+  <group scale={0.42}>
+    <Sphere args={[0.38, 28, 28]} position={[0, 0, 0]}>
+      <meshStandardMaterial
+        color="#B91C1C"
+        roughness={0.42}
+        metalness={0.15}
+        emissive="#450A0A"
+        emissiveIntensity={0.12}
+      />
+    </Sphere>
+    <Cylinder args={[0.028, 0.022, 0.14, 8]} position={[0.04, 0.46, 0]} rotation={[0.15, 0, 0.2]}>
+      <meshStandardMaterial color="#5C4033" roughness={0.85} metalness={0.05} />
+    </Cylinder>
+    <Sphere args={[0.1, 12, 12]} position={[-0.22, 0.32, 0.12]}>
+      <meshStandardMaterial color="#15803D" roughness={0.55} emissive="#052E16" emissiveIntensity={0.08} />
+    </Sphere>
+  </group>
+);
+
+/* ── Mini donut ── */
+const MiniDonut = () => (
+  <group scale={0.55} rotation={[0.4, 0.6, 0]}>
+    <Torus args={[0.32, 0.11, 14, 40]}>
+      <meshStandardMaterial
+        color="#CA8A04"
+        metalness={0.35}
+        roughness={0.4}
+        emissive="#713F12"
+        emissiveIntensity={0.08}
+      />
+    </Torus>
+    <Torus args={[0.26, 0.05, 12, 32]} position={[0, 0, 0.01]}>
+      <meshStandardMaterial color="#FDE68A" roughness={0.65} metalness={0.1} />
+    </Torus>
+  </group>
+);
+
+/* ── Carrot-ish cone ── */
+const MiniCarrot = () => (
+  <group scale={0.5} rotation={[0, 0, -0.8]}>
+    <Cone args={[0.12, 0.48, 10]} position={[0, 0.1, 0]}>
+      <meshStandardMaterial
+        color="#EA580C"
+        roughness={0.5}
+        metalness={0.1}
+        emissive="#7C2D12"
+        emissiveIntensity={0.06}
+      />
+    </Cone>
+    <Cylinder args={[0.04, 0.12, 0.08, 8]} position={[0, -0.22, 0]}>
+      <meshStandardMaterial color="#166534" roughness={0.7} />
+    </Cylinder>
+  </group>
+);
+
+/* ── Orbits a child mesh around the Y axis ── */
+const FoodOrbit = ({ radius, speed, yOffset = 0, phase = 0, children }) => {
+  const ref = useRef();
+  useFrame((state) => {
+    if (!ref.current) return;
+    const t = state.clock.elapsedTime * speed + phase;
+    ref.current.position.x = Math.cos(t) * radius;
+    ref.current.position.z = Math.sin(t) * radius;
+    ref.current.position.y = yOffset + Math.sin(t * 2.1) * 0.22;
+    ref.current.rotation.y = t * 1.2;
+  });
+  return <group ref={ref}>{children}</group>;
+};
+
 /* ── Floating octahedron satellites ── */
 const Satellite = ({ position, color, speed, scale = 1 }) => {
   const ref = useRef();
@@ -95,19 +174,30 @@ const Scene = () => {
       <Stars radius={60} depth={30} count={800} factor={2} saturation={0} fade speed={0.6} />
 
       <ambientLight intensity={0.4} />
-      <pointLight position={[5, 5, 5]}   intensity={1.2} color="#D4AF37" />
+      <pointLight position={[5, 5, 5]} intensity={1.2} color="#D4AF37" />
       <pointLight position={[-5, -5, 3]} intensity={0.8} color="#7C3AED" />
-      <pointLight position={[0, 5, -5]}  intensity={0.6} color="#3B82F6" />
+      <pointLight position={[0, 5, -5]} intensity={0.6} color="#3B82F6" />
+      <pointLight position={[0, -4, 4]} intensity={0.35} color="#22C55E" />
 
       <group ref={groupRef}>
         <GoldenRing />
         <GlowSphere />
 
-        <Satellite position={[ 2.4,  0.8, 0.5]} color="#D4AF37" speed={0.018} scale={1.3} />
+        <FoodOrbit radius={2.35} speed={0.35} yOffset={0.15} phase={0}>
+          <MiniApple />
+        </FoodOrbit>
+        <FoodOrbit radius={2.05} speed={-0.42} yOffset={-0.2} phase={1.8}>
+          <MiniDonut />
+        </FoodOrbit>
+        <FoodOrbit radius={2.55} speed={0.38} yOffset={0.05} phase={3.1}>
+          <MiniCarrot />
+        </FoodOrbit>
+
+        <Satellite position={[2.4, 0.8, 0.5]} color="#D4AF37" speed={0.018} scale={1.3} />
         <Satellite position={[-2.6, -0.5, 0.3]} color="#A78BFA" speed={0.012} scale={1.0} />
-        <Satellite position={[ 1.2, -1.8, 1.0]} color="#60A5FA" speed={0.022} scale={0.9} />
-        <Satellite position={[-1.5,  1.9, 0.8]} color="#34D399" speed={0.016} scale={0.8} />
-        <Satellite position={[ 2.8, -1.2, 0.2]} color="#F472B6" speed={0.014} scale={0.7} />
+        <Satellite position={[1.2, -1.8, 1.0]} color="#60A5FA" speed={0.022} scale={0.9} />
+        <Satellite position={[-1.5, 1.9, 0.8]} color="#34D399" speed={0.016} scale={0.8} />
+        <Satellite position={[2.8, -1.2, 0.2]} color="#F472B6" speed={0.014} scale={0.7} />
       </group>
     </>
   );

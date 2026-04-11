@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react
 import { motion, AnimatePresence } from 'framer-motion';
 import { ToastProvider } from './components/Toast';
 import AnimatedBackground from './components/AnimatedBackground';
+import GlobalAmbientMotion from './components/GlobalAmbientMotion';
+import SiteAmbient3D from './components/SiteAmbient3D';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -35,10 +37,10 @@ const NotFound = () => (
     style={{ background: 'linear-gradient(180deg, #0D1020 0%, #080B14 100%)' }}>
     <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: 'spring', stiffness: 200 }}>
       <motion.p animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 3, repeat: Infinity }} className="text-7xl mb-6">⭐</motion.p>
-      <h1 className="serif text-3xl font-black text-white mb-3">Page Not Found</h1>
-      <p className="text-slate-500 text-base mb-8">This page doesn't exist. Let's get you back on track.</p>
-      <Link to="/" className="btn-gold rounded-2xl px-7 py-3.5 text-sm font-bold inline-flex items-center gap-2">
-        ← Return Home
+      <h1 className="font-elegant text-6xl sm:text-7xl text-white mb-2 leading-none">404</h1>
+      <p className="text-slate-500 text-sm mb-7">Nothing here.</p>
+      <Link to="/" className="btn-gold rounded-2xl px-6 py-3 text-sm font-bold inline-flex items-center gap-2">
+        ← Home
       </Link>
     </motion.div>
   </div>
@@ -48,11 +50,12 @@ const AppContent = () => {
   const location = useLocation();
   return (
     <div className="page-shell flex flex-col min-h-screen relative overflow-hidden">
-      {/* Global moving particle background */}
+      <GlobalAmbientMotion />
+      <SiteAmbient3D />
       <AnimatedBackground />
-      <div className="absolute inset-0 notion-grid pointer-events-none" />
+      <div className="absolute inset-0 notion-grid notion-grid--ambient pointer-events-none z-[3]" />
       <Navbar />
-      <main className="flex-1">
+      <main className="flex-1 relative z-10">
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/"               element={<PageTransition><HomePage /></PageTransition>}               />

@@ -28,7 +28,7 @@ const ResultCard = ({ product, rating, personalized = false, generalRating = nul
           {product.emoji}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-white font-bold text-lg serif truncate">{product.name}</h3>
+          <h3 className="text-white font-sans font-bold text-lg tracking-tight truncate">{product.name}</h3>
           <p className="text-slate-500 text-xs mt-0.5">{product.brand} · {product.category}</p>
         </div>
         <HealthBadge status={status} size="md" />

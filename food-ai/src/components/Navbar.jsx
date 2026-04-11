@@ -2,13 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { HiCamera } from 'react-icons/hi2';
 import logo from '../assets/logo.png';
 
 const links = [
   { path: '/',               label: 'Home' },
-  { path: '/general-rating', label: 'General Rating' },
-  { path: '/personalized',   label: 'Personalized' },
-  { path: '/scan',           label: 'Scan & Rate' },
+  { path: '/general-rating', label: 'General' },
+  { path: '/personalized',   label: 'My score' },
+  { path: '/scan',           label: 'Scan' },
   { path: '/about',          label: 'About' },
 ];
 
@@ -46,8 +47,8 @@ const Navbar = () => {
               onError={(e) => { e.target.style.display = 'none'; }}
             />
             <div className="hidden sm:block leading-none">
-              <span className="serif gold-text text-lg font-bold">ValidEats</span>
-              <p className="text-[10px] text-slate-500 tracking-[0.15em] uppercase mt-0.5">Verified Star Ratings</p>
+              <span className="font-elegant gold-text text-2xl leading-none">ValidEats</span>
+              <p className="text-[10px] text-slate-500 tracking-wide mt-0.5 font-medium">Food scores</p>
             </div>
           </Link>
 
@@ -57,7 +58,7 @@ const Navbar = () => {
               const active = pathname === link.path;
               return (
                 <Link key={link.path} to={link.path}
-                  className={`relative px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200
+                  className={`relative px-3 py-2 text-[13px] font-semibold tracking-wide rounded-xl transition-all duration-200
                     ${active ? 'text-gold' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
                   {link.label}
                   {active && (
@@ -78,7 +79,8 @@ const Navbar = () => {
                 whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
                 className="btn-gold rounded-xl px-5 py-2.5 text-sm flex items-center gap-2"
               >
-                <span>📸</span><span>Scan Now</span>
+                <HiCamera size={18} className="shrink-0 relative z-[2] text-brand-bg" aria-hidden />
+                <span className="relative z-[2]">Scan</span>
               </motion.button>
             </Link>
           </div>
@@ -127,7 +129,8 @@ const Navbar = () => {
               ))}
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="pt-2">
                 <Link to="/scan" className="btn-gold rounded-xl px-5 py-3 text-sm w-full flex items-center justify-center gap-2">
-                  <span>📸</span> Scan Now
+                  <HiCamera size={18} className="shrink-0 relative z-[2] text-brand-bg" aria-hidden />
+                  <span className="relative z-[2]">Scan</span>
                 </Link>
               </motion.div>
             </div>

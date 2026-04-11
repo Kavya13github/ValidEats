@@ -51,10 +51,13 @@ const GeneralRatingPage = () => {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 pt-24 pb-16">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-10">
-          <p className="label-sm mb-3">General Rating</p>
-          <h1 className="serif text-[clamp(2rem,5vw,3.2rem)] font-black text-white mb-3">How healthy is this food?</h1>
-          <p className="text-muted text-lg max-w-xl">Select a product and age group to get a verified star rating with expert health explanation.</p>
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-8">
+          <p className="type-hand-sm text-gold/85 mb-1 normal-case">general lane</p>
+          <h1 className="mb-2 leading-tight">
+            <span className="type-elegant text-[clamp(2.75rem,6vw,4rem)] text-white block">Point at a snack.</span>
+            <span className="type-sans-pair block text-[clamp(1.1rem,2.6vw,1.5rem)] text-slate-300 mt-1">we star it for that age.</span>
+          </h1>
+          <p className="type-hand-sm text-slate-500 max-w-md normal-case">tell us who is eating — we translate the label into plain air.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -66,11 +69,11 @@ const GeneralRatingPage = () => {
             <div className="card-static p-6 rounded-3xl">
               <div className="flex items-center gap-3 mb-5">
                 <span className="step-num">1</span>
-                <span className="text-slate-200 font-semibold">Choose a Product</span>
+                <span className="text-slate-200 font-semibold text-sm">Product</span>
               </div>
-              <SearchBar onSelect={pick} value={query} onChange={setQuery} placeholder="Type to search..." />
-              <div className="mt-4">
-                <p className="text-slate-600 text-[11px] uppercase tracking-wider font-semibold mb-2.5">Quick picks</p>
+              <SearchBar onSelect={pick} value={query} onChange={setQuery} placeholder="Search…" />
+              <div className="mt-3">
+                <p className="text-slate-600 text-[10px] uppercase tracking-wider font-semibold mb-2">Quick</p>
                 <div className="flex flex-wrap gap-2">
                   {quickNames.map((name) => {
                     const p = products.find((pr) => pr.name.toLowerCase().includes(name.toLowerCase()));
@@ -94,11 +97,11 @@ const GeneralRatingPage = () => {
             <div className="card-static p-6 rounded-3xl">
               <div className="flex items-center gap-3 mb-4">
                 <span className="step-num">2</span>
-                <span className="text-slate-200 font-semibold">Select Age Group</span>
+                <span className="text-slate-200 font-semibold text-sm">Age group</span>
               </div>
               <SelectField name="ageGroup" value={ageGroup} onChange={(e) => setAgeGroup(e.target.value)}
-                options={ageGroups} placeholder="Choose age group..."
-                helper="Nutritional needs vary across age groups." />
+                options={ageGroups} placeholder="Who is it for?"
+                helper="Needs differ by age." />
             </div>
 
             {/* Selected indicator */}
@@ -108,7 +111,7 @@ const GeneralRatingPage = () => {
                   className="flex items-center gap-3 px-4 py-3.5 bg-gold/8 border border-gold/20 rounded-2xl">
                   <span className="text-2xl">{selected.emoji}</span>
                   <div className="flex-1">
-                    <p className="text-slate-500 text-xs">Ready to analyse</p>
+                    <p className="text-slate-500 text-xs">Selected</p>
                     <p className="text-white font-bold text-sm">{selected.name}</p>
                   </div>
                   <span className="text-gold text-xl">★</span>
@@ -135,13 +138,8 @@ const GeneralRatingPage = () => {
               {loading && (
                 <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                   className="card rounded-3xl py-16 text-center">
-                  <LoaderSpinner label="Analysing nutritional data..." size="lg" />
-                  <div className="mt-8 space-y-2">
-                    {['Checking ingredient safety...', 'Applying age-based thresholds...', 'Generating your health score...'].map((s, i) => (
-                      <motion.p key={s} initial={{ opacity: 0 }} animate={{ opacity: 0.7 }} transition={{ delay: i * 0.6 }}
-                        className="text-slate-600 text-sm">{s}</motion.p>
-                    ))}
-                  </div>
+                  <LoaderSpinner label="Scoring…" size="lg" />
+                  <p className="mt-6 text-slate-600 text-sm">Matching nutrition to your age group.</p>
                 </motion.div>
               )}
 
@@ -157,15 +155,15 @@ const GeneralRatingPage = () => {
                   style={{ borderColor: 'rgba(212,175,55,0.15)' }}>
                   <motion.span animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity }}
                     className="text-6xl block mb-5">⭐</motion.span>
-                  <p className="text-slate-300 font-bold text-lg mb-2">Rating ready to launch</p>
-                  <p className="text-slate-600 text-sm">Pick a product + age group, then hit Get Rating</p>
+                  <p className="text-slate-300 font-bold text-base mb-1">Your score appears here</p>
+                  <p className="text-slate-600 text-xs">Select food + age, then Get rating</p>
                 </motion.div>
               )}
             </AnimatePresence>
 
             {/* Product browser */}
             <div>
-              <p className="text-slate-600 text-xs uppercase tracking-wider font-semibold mb-4">Browse Products</p>
+              <p className="text-slate-600 text-[10px] uppercase tracking-wider font-semibold mb-3">More foods</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {products.slice(0, 6).map((p, i) => (
                   <motion.div key={p.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}>

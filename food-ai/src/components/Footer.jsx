@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
 const Footer = () => (
-  <footer className="relative overflow-hidden border-t border-gold/10"
-    style={{ background: 'linear-gradient(180deg, #080B14 0%, #0D0A14 100%)' }}>
+  <footer className="relative z-10 overflow-hidden border-t border-gold/10 backdrop-blur-md"
+    style={{ background: 'linear-gradient(180deg, rgba(8,11,20,0.82) 0%, rgba(8,10,20,0.94) 55%, rgba(6,8,16,0.97) 100%)' }}>
 
     {/* Top gold line */}
     <div className="gold-divider" />
@@ -22,28 +22,28 @@ const Footer = () => (
             <img src={logo} alt="ValidEats" className="h-14 w-auto object-contain"
               onError={(e) => { e.target.style.display = 'none'; }} />
             <div>
-              <p className="serif text-xl font-bold gold-text">ValidEats</p>
-              <p className="text-[10px] text-slate-600 tracking-widest uppercase">Verified Star Ratings</p>
+              <p className="font-elegant text-3xl gold-text leading-none">ValidEats</p>
+              <p className="text-[10px] text-slate-600 tracking-wide font-medium">Food scores</p>
             </div>
           </div>
-          <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
-            The smart way to understand how packaged food affects <em className="text-slate-400 not-italic">your</em> health — personalised, instant, and evidence-based.
+          <p className="text-slate-500 text-sm leading-snug max-w-xs">
+            Simple stars for packaged food — general, personal, or from a photo.
           </p>
-          <div className="flex items-center gap-2 mt-5">
+          <div className="flex items-center gap-2 mt-4">
             <span className="w-1.5 h-1.5 rounded-full bg-safe animate-pulse" />
-            <span className="text-slate-600 text-xs">System Active · Hackathon 2026</span>
+            <span className="text-slate-600 text-xs">Live · 2026</span>
           </div>
         </div>
 
         {/* Links */}
         <div>
-          <p className="text-gold text-xs font-bold tracking-widest uppercase mb-4">Features</p>
-          <ul className="space-y-3">
+          <p className="text-gold text-xs font-bold tracking-wide uppercase mb-4">App</p>
+          <ul className="space-y-2.5">
             {[
-              { to: '/general-rating', label: 'General Rating', icon: '⭐' },
-              { to: '/personalized',   label: 'Personalized Rating', icon: '🧬' },
-              { to: '/scan',           label: 'Scan & Rate', icon: '📸' },
-              { to: '/about',          label: 'About ValidEats', icon: '📘' },
+              { to: '/general-rating', label: 'General', icon: '⭐' },
+              { to: '/personalized',   label: 'My score', icon: '🧬' },
+              { to: '/scan',           label: 'Scan', icon: '📸' },
+              { to: '/about',          label: 'About', icon: '📘' },
             ].map((l) => (
               <li key={l.to}>
                 <Link to={l.to} className="text-slate-500 hover:text-white text-sm transition-colors flex items-center gap-2 group">
@@ -57,14 +57,14 @@ const Footer = () => (
 
         {/* Rating guide */}
         <div>
-          <p className="text-gold text-xs font-bold tracking-widest uppercase mb-4">Rating Guide</p>
-          <ul className="space-y-3">
+          <p className="text-gold text-xs font-bold tracking-wide uppercase mb-3">Stars</p>
+          <ul className="space-y-2">
             {[
-              { color: 'bg-safe',    label: '4–5 ★ Safe to consume' },
-              { color: 'bg-caution', label: '2.5–3.9 ★ Moderate intake' },
-              { color: 'bg-risk',    label: '0–2.4 ★ Limit or avoid' },
+              { color: 'bg-safe',    label: '4–5 ★ Good' },
+              { color: 'bg-caution', label: '2.5–3.9 ★ Sometimes' },
+              { color: 'bg-risk',    label: 'Under 2.5 ★ Rare' },
             ].map((r) => (
-              <li key={r.label} className="flex items-center gap-2.5 text-sm text-slate-500">
+              <li key={r.label} className="flex items-center gap-2.5 text-xs text-slate-500">
                 <span className={`w-2 h-2 rounded-full flex-shrink-0 ${r.color}`} />
                 {r.label}
               </li>
@@ -75,8 +75,8 @@ const Footer = () => (
 
       <div className="gold-divider-subtle mb-6" />
       <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-slate-700">
-        <p>© 2026 ValidEats · Verified Star Ratings · Built for Hackathon 2026</p>
-        <p>For informational purposes only. Not a substitute for medical advice.</p>
+        <p>© 2026 ValidEats</p>
+        <p className="text-center md:text-right">Info only — not medical advice.</p>
       </div>
     </div>
   </footer>

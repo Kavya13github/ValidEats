@@ -2,8 +2,8 @@
 // Global canvas-based moving particle network — zero dependency on Three.js
 import React, { useRef, useEffect } from 'react';
 
-const PARTICLE_COUNT = 80;
-const MAX_DIST       = 140;
+const PARTICLE_COUNT = 52;
+const MAX_DIST       = 118;
 const GOLD           = '212, 175, 55';
 const BLUE           = '96, 165, 250';
 const PURPLE         = '167, 139, 250';
@@ -16,12 +16,12 @@ class Particle {
   reset(w, h) {
     this.x   = rand(0, w);
     this.y   = rand(0, h);
-    this.vx  = rand(-0.22, 0.22);
-    this.vy  = rand(-0.22, 0.22);
+    this.vx  = rand(-0.12, 0.12);
+    this.vy  = rand(-0.12, 0.12);
     this.r   = rand(1, 2.2);
     const p  = Math.random();
     this.color = p < 0.6 ? GOLD : p < 0.8 ? BLUE : PURPLE;
-    this.a   = rand(0.3, 0.8);
+    this.a   = rand(0.2, 0.55);
   }
 
   update(w, h) {
@@ -80,7 +80,7 @@ const AnimatedBackground = () => {
           const dx = a.x - b.x, dy = a.y - b.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < MAX_DIST) {
-            const alpha = (1 - dist / MAX_DIST) * 0.18;
+            const alpha = (1 - dist / MAX_DIST) * 0.12;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -95,7 +95,7 @@ const AnimatedBackground = () => {
         const mdx = p.x - mouse.x, mdy = p.y - mouse.y;
         const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
         if (mdist < 160) {
-          const alpha = (1 - mdist / 160) * 0.55;
+          const alpha = (1 - mdist / 160) * 0.32;
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouse.x, mouse.y);
@@ -127,7 +127,7 @@ const AnimatedBackground = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0, opacity: 0.7 }}
+      style={{ zIndex: 2, opacity: 0.42 }}
     />
   );
 };

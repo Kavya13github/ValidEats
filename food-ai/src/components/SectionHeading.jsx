@@ -20,7 +20,7 @@ const SectionHeading = ({ label, title, subtitle, align = 'center', light = fals
           {align === 'center' && <div className="h-px w-12 bg-gradient-to-l from-transparent to-gold/50" />}
         </div>
       )}
-      <h2 className={`serif-heading text-3xl md:text-4xl font-bold leading-tight ${light ? 'text-charcoal-900' : 'text-white'}`}>
+      <h2 className={`font-elegant text-4xl md:text-5xl leading-none ${light ? 'text-charcoal-900' : 'text-white'}`}>
         {title}
       </h2>
       {subtitle && (

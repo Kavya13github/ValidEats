@@ -54,10 +54,13 @@ const ScanRatePage = () => {
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-8 pt-24 pb-16">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <p className="label-sm mb-3">AI Scanner</p>
-          <h1 className="serif text-[clamp(2rem,5vw,3.2rem)] font-black text-white mb-3">Scan any food packet.</h1>
-          <p className="text-muted text-lg max-w-xl">Upload a photo. Our AI reads the label and generates an instant health report.</p>
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+          <p className="type-hand-sm text-gold/85 mb-1 normal-case">scan lane</p>
+          <h1 className="mb-2 leading-tight">
+            <span className="type-elegant text-[clamp(2.75rem,6vw,4rem)] text-white block sm:inline">Show us the foil.</span>
+            <span className="type-sans-pair text-[clamp(1.05rem,2.5vw,1.45rem)] text-slate-300 block sm:inline sm:ml-2 mt-1 sm:mt-0">we chase the ink.</span>
+          </h1>
+          <p className="type-hand-sm text-slate-500 max-w-md normal-case">crooked light, crumpled corners — still readable if you mean it.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -71,7 +74,7 @@ const ScanRatePage = () => {
               />
               {file && state === 'idle' && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-5">
-                  <Button onClick={runScan} fullWidth size="lg" icon="📸">Analyze Package</Button>
+                  <Button onClick={runScan} fullWidth size="lg" icon="📸">Analyze</Button>
                 </motion.div>
               )}
               {state === 'done' && (
@@ -88,18 +91,17 @@ const ScanRatePage = () => {
             )}
 
             {/* How it works */}
-            <div className="card-static p-6 rounded-3xl">
-              <p className="label-sm mb-4">How It Works</p>
-              <div className="space-y-3">
+            <div className="card-static p-5 rounded-3xl">
+              <p className="label-sm mb-3">How</p>
+              <div className="space-y-2">
                 {[
-                  { n: '01', text: 'Upload a clear photo of the packet.' },
-                  { n: '02', text: 'AI identifies the product & reads nutrition data.' },
-                  { n: '03', text: 'Ingredients and additives are flagged.' },
-                  { n: '04', text: 'Health score, warnings & alternatives generated.' },
+                  { n: '1', text: 'Upload a sharp front-of-pack shot.' },
+                  { n: '2', text: 'We read nutrition + ingredients.' },
+                  { n: '3', text: 'You get stars and quick warnings.' },
                 ].map((s) => (
-                  <div key={s.n} className="flex items-start gap-3 text-sm">
-                    <span className="text-gold/50 font-bold w-5 flex-shrink-0">{s.n}</span>
-                    <span className="text-slate-400 leading-relaxed">{s.text}</span>
+                  <div key={s.n} className="flex items-start gap-2.5 text-xs">
+                    <span className="text-gold/60 font-bold w-4 flex-shrink-0">{s.n}</span>
+                    <span className="text-slate-400 leading-snug">{s.text}</span>
                   </div>
                 ))}
               </div>
@@ -117,7 +119,7 @@ const ScanRatePage = () => {
                   <div className="card rounded-3xl py-20 text-center border-dashed" style={{ borderColor: 'rgba(20,184,166,0.2)' }}>
                     <motion.span animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity }}
                       className="text-6xl block mb-5">📦</motion.span>
-                    <p className="text-slate-300 font-bold text-lg mb-2">Awaiting image upload</p>
+                    <p className="text-slate-300 font-bold text-sm mb-1">Drop a photo here</p>
                     <p className="text-slate-600 text-sm">Upload a packet to start the analysis</p>
                     <div className="mt-6 grid grid-cols-3 gap-2 opacity-20 max-w-48 mx-auto">
                       {['Cal', 'Fat', 'Sugar', 'Salt', 'Protein', 'Adds.'].map((l) => (
@@ -188,7 +190,7 @@ const ScanRatePage = () => {
                       style={{ background: 'linear-gradient(135deg, rgba(212,175,55,0.05), transparent)' }}>
                       <div>
                         <p className="text-slate-500 text-xs mb-1">Detected Product</p>
-                        <h3 className="text-white font-bold text-xl serif">{result.detected}</h3>
+                        <h3 className="text-white font-sans font-bold text-xl tracking-tight">{result.detected}</h3>
                         <p className="text-slate-600 text-xs">{result.brand}</p>
                       </div>
                       <HealthBadge status={result.status} size="lg" />
