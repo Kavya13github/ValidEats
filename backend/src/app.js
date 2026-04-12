@@ -18,7 +18,17 @@ app.use(compression());
 app.use(morgan("dev"));
 
 // ================= CORS =================
-app.use(cors());
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://valid-eats.vercel.app'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions));
 
 // ================= BODY PARSER =================
 app.use(express.json({ limit: "10mb" }));
