@@ -208,8 +208,11 @@ const HeroScene = () => (
     className="absolute inset-0 pointer-events-none"
     style={{ zIndex: 1 }}
     camera={{ position: [0, 0, 6], fov: 50 }}
-    gl={{ alpha: true, antialias: true }}
-    dpr={[1, 1.5]}
+    gl={{ alpha: true, antialias: false, powerPreference: 'low-power' }}
+    dpr={[1, 1]}
+    onCreated={({ gl }) => {
+      gl.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); }, false);
+    }}
   >
     <Scene />
   </Canvas>

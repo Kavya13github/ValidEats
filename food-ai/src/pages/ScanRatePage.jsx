@@ -5,13 +5,54 @@ import ScanUploadBox from '../components/ScanUploadBox';
 import Button from '../components/Button';
 import RatingStars from '../components/RatingStars';
 import HealthBadge from '../components/HealthBadge';
-import NutritionChip from '../components/NutritionChip';
+// NutritionChip replaced by inline ScanNutrientBar
 import AlertBox from '../components/AlertBox';
 import LoaderSpinner from '../components/LoaderSpinner';
 import FloatingOrbs from '../components/FloatingOrbs';
 import { useToast } from '../components/Toast';
 import { scanImage } from '../utils/api';
 import { scanStages } from '../data/scanResults';
+
+/* ── Scan helpers ─────────────────────────────────────────────── */
+const ScanNutrientBar = ({ label, value, unit, max, color, delay = 0 }) => {
+  const pct = Math.min(100, Math.round((value / max) * 100));
+  return (
+    <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay, duration: 0.4 }} className="space-y-1">
+      <div className="flex justify-between items-center">
+        <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">{label}</span>
+        <span className="text-[11px] font-bold" style={{ color }}>{value}{unit}</span>
+      </div>
+      <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
+        <motion.div className="h-full rounded-full" style={{ background: color }}
+          initial={{ width: 0 }} animate={{ width: `${pct}%` }}
+          transition={{ delay: delay + 0.1, duration: 0.7, ease: 'easeOut' }} />
+      </div>
+    </motion.div>
+  );
+};
+
+const ScanScoreRing = ({ stars, status }) => {
+  const r = 32; const circ = 2 * Math.PI * r;
+  const dash = (stars / 5) * circ;
+  const color = status === 'safe' ? '#22c55e' : status === 'risk' ? '#ef4444' : '#f59e0b';
+  const label = status === 'safe' ? 'SAFE' : status === 'risk' ? 'RISK' : 'CAUTION';
+  return (
+    <div className="relative flex items-center justify-center flex-shrink-0" style={{ width: 80, height: 80 }}>
+      <svg width="80" height="80" style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx="40" cy="40" r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="5" />
+        <motion.circle cx="40" cy="40" r={r} fill="none" stroke={color} strokeWidth="5" strokeLinecap="round"
+          strokeDasharray={`${circ}`}
+          initial={{ strokeDashoffset: circ }} animate={{ strokeDashoffset: circ - dash }}
+          transition={{ duration: 1.2, ease: 'easeOut', delay: 0.2 }}
+          style={{ filter: `drop-shadow(0 0 5px ${color}88)` }} />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-lg font-black text-white leading-none">{stars.toFixed(1)}</span>
+        <span className="text-[8px] font-bold tracking-widest mt-0.5" style={{ color }}>{label}</span>
+      </div>
+    </div>
+  );
+};
 
 const ScanRatePage = () => {
   const toast = useToast();
@@ -179,61 +220,139 @@ const ScanRatePage = () => {
               {/* Result */}
               {state === 'done' && result && (
                 <motion.div key="result" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                  {/* Confidence */}
-                  <div className="flex items-center gap-3 px-4 py-3 bg-safe/10 border border-safe/25 rounded-2xl mb-4">
-                    <span className="w-2 h-2 rounded-full bg-safe flex-shrink-0" />
-                    <p className="text-safe text-sm font-semibold">Analysis complete · {result.confidence}% confidence</p>
+                  {/* Confidence bar */}
+                  <div className="flex items-center gap-3 px-4 py-3 mb-4 rounded-2xl"
+                    style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.22)' }}>
+                    <motion.span
+                      className="w-2 h-2 rounded-full flex-shrink-0"
+                      style={{ background: '#22c55e' }}
+                      animate={{ opacity: [1, 0.3, 1] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    />
+                    <p className="text-green-400 text-sm font-semibold">Analysis complete</p>
+                    <div className="flex-1 h-1 rounded-full bg-white/5 overflow-hidden ml-1">
+                      <motion.div className="h-full rounded-full bg-green-400"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${result.confidence}%` }}
+                        transition={{ duration: 0.9, ease: 'easeOut', delay: 0.2 }}
+                      />
+                    </div>
+                    <span className="text-green-400 text-xs font-bold">{result.confidence}%</span>
                   </div>
 
-                  <div className="card-static rounded-3xl overflow-hidden">
-                    <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between gap-3"
-                      style={{ background: 'linear-gradient(135deg, rgba(212,175,55,0.05), transparent)' }}>
+                  <div className="rounded-3xl overflow-hidden"
+                    style={{ border: `1px solid ${result.status === 'safe' ? 'rgba(34,197,94,0.2)' : result.status === 'risk' ? 'rgba(239,68,68,0.2)' : 'rgba(245,158,11,0.2)'}`, background: '#0D1020' }}>
+                    
+                    {/* Lab header */}
+                    <div className="px-5 py-3 flex items-center justify-between"
+                      style={{ background: `${result.status === 'safe' ? 'rgba(34,197,94,0.04)' : result.status === 'risk' ? 'rgba(239,68,68,0.04)' : 'rgba(245,158,11,0.04)'}`, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                      <span className="text-[10px] font-bold tracking-[0.2em] uppercase"
+                        style={{ color: result.status === 'safe' ? '#22c55e' : result.status === 'risk' ? '#ef4444' : '#f59e0b' }}>
+                        ● SCAN ANALYSIS REPORT
+                      </span>
+                      <span className="text-[10px] text-slate-600 font-mono">ValidEats AI v2.0</span>
+                    </div>
+
+                    {/* Product */}
+                    <div className="px-5 pt-5 pb-4 flex items-center justify-between gap-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                       <div>
                         <p className="text-slate-500 text-xs mb-1">Detected Product</p>
                         <h3 className="text-white font-sans font-bold text-xl tracking-tight">{result.detected}</h3>
-                        <p className="text-slate-600 text-xs">{result.brand}</p>
+                        <p className="text-slate-600 text-xs mt-0.5">{result.brand}</p>
                       </div>
                       <HealthBadge status={result.status} size="lg" />
                     </div>
 
-                    <div className="p-6 space-y-5">
-                      <RatingStars stars={result.stars} size="lg" />
-
-                      <div className={`px-4 py-3 rounded-xl border text-sm font-semibold
-                        ${result.status === 'safe' ? 'bg-safe/10 border-safe/30 text-safe' :
-                          result.status === 'risk' ? 'bg-risk/10 border-risk/30 text-risk' :
-                          'bg-caution/10 border-caution/30 text-caution'}`}>
-                        {result.verdict}
-                      </div>
-
-                      <div>
-                        <p className="text-slate-500 text-xs uppercase tracking-wider font-semibold mb-3">Extracted Nutrition</p>
-                        <div className="flex flex-wrap gap-2">
-                          <NutritionChip label="Calories" value={result.nutrition.calories.value} unit="kcal" nutritionKey="calories" />
-                          <NutritionChip label="Fat"      value={result.nutrition.fat.value}      unit="g"    nutritionKey="fat" />
-                          <NutritionChip label="Sugar"    value={result.nutrition.sugar.value}    unit="g"    nutritionKey="sugar" />
-                          <NutritionChip label="Salt"     value={result.nutrition.salt.value}     unit="g"    nutritionKey="salt" />
-                          <NutritionChip label="Protein"  value={result.nutrition.protein.value}  unit="g"    nutritionKey="protein" />
+                    <div className="p-5 space-y-5">
+                      {/* Score + verdict */}
+                      <div className="flex items-center gap-4">
+                        {/* Mini score ring */}
+                        <ScanScoreRing stars={result.stars} status={result.status} />
+                        <div>
+                          <RatingStars stars={result.stars} size="md" />
+                          <div className="mt-2 inline-flex px-3 py-1.5 rounded-xl text-xs font-bold"
+                            style={{
+                              background: `${result.status === 'safe' ? 'rgba(34,197,94,0.12)' : result.status === 'risk' ? 'rgba(239,68,68,0.12)' : 'rgba(245,158,11,0.12)'}`,
+                              border: `1px solid ${result.status === 'safe' ? 'rgba(34,197,94,0.3)' : result.status === 'risk' ? 'rgba(239,68,68,0.3)' : 'rgba(245,158,11,0.3)'}`,
+                              color: result.status === 'safe' ? '#22c55e' : result.status === 'risk' ? '#ef4444' : '#f59e0b',
+                            }}>
+                            {result.verdict}
+                          </div>
                         </div>
                       </div>
 
-                      {/* Warning labels */}
-                      <div className="flex flex-wrap gap-2">
+                      {/* Nutrient bars */}
+                      <div className="p-4 rounded-2xl space-y-3"
+                        style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-3">Nutritional Profile · per 100g</p>
+                        <ScanNutrientBar label="Calories" value={result.nutrition.calories.value} unit=" kcal" max={600} color="#f59e0b" delay={0.05} />
+                        <ScanNutrientBar label="Fat"      value={result.nutrition.fat.value}      unit="g"    max={40}  color="#ef4444" delay={0.10} />
+                        <ScanNutrientBar label="Sugar"    value={result.nutrition.sugar.value}    unit="g"    max={50}  color="#f97316" delay={0.15} />
+                        <ScanNutrientBar label="Salt"     value={result.nutrition.salt.value}     unit="g"    max={5}   color="#eab308" delay={0.20} />
+                        <ScanNutrientBar label="Protein"  value={result.nutrition.protein.value}  unit="g"    max={30}  color="#22c55e" delay={0.25} />
+                      </div>
+
+                      {/* Risk label chips */}
+                      <div className="flex flex-wrap gap-1.5">
                         {result.labels.map((l) => (
-                          <span key={l} className="text-xs bg-risk/10 border border-risk/25 text-risk px-2.5 py-1 rounded-xl font-semibold">{l}</span>
+                          <span key={l} className="inline-flex items-center text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg"
+                            style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.28)', color: '#f87171' }}>
+                            {l}
+                          </span>
                         ))}
                       </div>
 
-                      <div className="bg-brand-card rounded-2xl p-4 border border-white/5">
-                        <p className="text-slate-500 text-xs font-semibold mb-1.5">Recommendation</p>
+                      {/* Warnings + positives */}
+                      {(result.warnings?.length > 0 || result.positives?.length > 0) && (
+                        <div className="grid grid-cols-1 gap-3">
+                          {result.warnings?.length > 0 && (
+                            <div className="p-4 rounded-2xl"
+                              style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.18)' }}>
+                              <p className="text-[10px] font-bold uppercase tracking-widest text-red-400 mb-2.5">⚠ Risk Factors</p>
+                              <ul className="space-y-1.5">
+                                {result.warnings.map((w, i) => (
+                                  <li key={i} className="flex items-start gap-2 text-xs text-slate-400">
+                                    <span className="text-red-500 mt-0.5 text-[10px] flex-shrink-0">●</span>{w}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          {result.positives?.length > 0 && (
+                            <div className="p-4 rounded-2xl"
+                              style={{ background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.18)' }}>
+                              <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-2.5">✓ Positives</p>
+                              <ul className="space-y-1.5">
+                                {result.positives.map((p, i) => (
+                                  <li key={i} className="flex items-start gap-2 text-xs text-slate-400">
+                                    <span className="text-green-500 mt-0.5 text-[10px] flex-shrink-0">●</span>{p}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* AI recommendation */}
+                      <div className="p-4 rounded-2xl"
+                        style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span>🧠</span>
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">AI Recommendation</p>
+                        </div>
                         <p className="text-slate-300 text-sm leading-relaxed">{result.suggestion}</p>
                       </div>
 
+                      {/* Alternatives */}
                       <div>
-                        <p className="text-safe text-xs font-semibold uppercase tracking-wider mb-2">✓ Healthier Alternatives</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-2.5">✓ Healthier Alternatives</p>
                         <div className="flex flex-wrap gap-2">
                           {result.alternatives.map((a) => (
-                            <span key={a} className="text-xs bg-safe/10 border border-safe/25 text-safe px-2.5 py-1.5 rounded-xl font-semibold">{a}</span>
+                            <span key={a} className="text-xs px-2.5 py-1.5 rounded-xl font-semibold"
+                              style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)', color: '#4ade80' }}>
+                              {a}
+                            </span>
                           ))}
                         </div>
                       </div>

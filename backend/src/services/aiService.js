@@ -69,8 +69,7 @@ EXAMPLES of correct length:
 `;
 
     const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const text = result.response.text();
     console.log("AI RAW RESPONSE:", text);
 
     return text;
@@ -87,7 +86,7 @@ EXAMPLES of correct length:
 // ═══════════════════════════════════════════
 exports.generateScanReport = async (productData, user) => {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const ingredientsList = (productData.ingredients || []).join(", ") || "Not available";
     const additivesList = (productData.additives || []).join(", ") || "None detected";
@@ -163,8 +162,7 @@ EXAMPLES of correct length:
 `;
 
     const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const text = result.response.text();
     console.log("SCAN REPORT RAW:", text);
 
     return text;

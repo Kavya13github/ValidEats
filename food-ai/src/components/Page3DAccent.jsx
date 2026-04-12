@@ -153,7 +153,14 @@ const InnerScene = ({ variant }) => {
 
 const Page3DAccent = ({ variant = 'ring', size = 180, className = '' }) => (
   <div className={`pointer-events-none ${className}`} style={{ width: size, height: size }}>
-    <Canvas camera={{ position: [0, 0, 3.5], fov: 45 }} gl={{ alpha: true, antialias: true }} dpr={[1, 1.5]}>
+    <Canvas
+      camera={{ position: [0, 0, 3.5], fov: 45 }}
+      gl={{ alpha: true, antialias: false, powerPreference: 'low-power' }}
+      dpr={[1, 1]}
+      onCreated={({ gl }) => {
+        gl.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); }, false);
+      }}
+    >
       <Suspense fallback={null}>
         <InnerScene variant={variant} />
       </Suspense>
