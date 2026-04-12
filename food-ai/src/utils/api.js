@@ -26,8 +26,11 @@ export const searchProducts = async (query) => {
 
   // Dummy: filter from local data
   const { products } = await import('../data/products.js');
+  const q = query.toLowerCase();
   return products.filter((p) =>
-    p.name.toLowerCase().includes(query.toLowerCase())
+    p.name.toLowerCase().includes(q)
+    || p.brand.toLowerCase().includes(q)
+    || p.category.toLowerCase().includes(q)
   );
 };
 

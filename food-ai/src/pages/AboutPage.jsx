@@ -4,6 +4,12 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Button from '../components/Button';
 import StatNumber from '../components/StatNumber';
+import {
+  SITE_PRODUCTS_APPROX,
+  SITE_SCANS_APPROX,
+  SITE_MODES_COUNT,
+  SITE_SCALE_STARS,
+} from '../data/siteStats';
 import FloatingOrbs from '../components/FloatingOrbs';
 import logo from '../assets/logo.png';
 
@@ -69,10 +75,10 @@ const AboutPage = () => {
         <section>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-gold/10 rounded-2xl overflow-hidden border border-gold/10">
             {[
-              { val: '10+', label: 'Foods',    to: '/general-rating' },
-              { val: '3',   label: 'Modes',    to: '/about#three-modes' },
-              { val: '∞',   label: 'Profiles', to: '/personalized' },
-              { val: 'AI',  label: 'Scan',     to: '/scan' },
+              { target: SITE_PRODUCTS_APPROX, suffix: '+', label: 'Products', to: '/general-rating' },
+              { target: SITE_MODES_COUNT,     suffix: '',  label: 'Modes',    to: '/about#three-modes' },
+              { target: SITE_SCALE_STARS,     suffix: '★', label: 'Scale',    to: '/about#how-we-score' },
+              { target: SITE_SCANS_APPROX,    suffix: '+', label: 'Scans',    to: '/scan' },
             ].map((s, i) => (
               <motion.div key={s.label} {...fadeUp(i * 0.06)} className="min-h-0">
                 <motion.div
@@ -87,7 +93,7 @@ const AboutPage = () => {
                       hover:bg-brand-card-2 transition-colors cursor-pointer
                       outline-none focus-visible:ring-2 focus-visible:ring-gold/45 focus-visible:ring-inset"
                   >
-                    <StatNumber value={s.val} />
+                    <StatNumber target={s.target} suffix={s.suffix} delay={i * 140} />
                     <span className="text-slate-300 text-xs sm:text-sm font-semibold uppercase tracking-[0.14em] mt-3 max-w-[12rem] leading-snug">
                       {s.label}
                     </span>

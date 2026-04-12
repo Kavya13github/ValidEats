@@ -10,6 +10,12 @@ import FoodAmbientLayer from '../components/FoodAmbientLayer';
 import StatNumber from '../components/StatNumber';
 const HeroScene = React.lazy(() => import('../components/HeroScene'));
 import { products } from '../data/products';
+import {
+  SITE_PRODUCTS_APPROX,
+  SITE_SCANS_APPROX,
+  SITE_MODES_COUNT,
+  SITE_SCALE_STARS,
+} from '../data/siteStats';
 
 const fadeUp = (delay = 0) => ({
   initial:    { opacity: 0, y: 28 },
@@ -29,10 +35,10 @@ const HomePage = () => {
   ];
 
   const stats = [
-    { val: '10+', label: 'Foods',    to: '/general-rating' },
-    { val: '3',   label: 'Modes',    to: '/about#three-modes' },
-    { val: '5★',  label: 'Scale',    to: '/about#how-we-score' },
-    { val: '∞',   label: 'Profiles', to: '/personalized' },
+    { target: SITE_PRODUCTS_APPROX, suffix: '+', label: 'Products', to: '/general-rating' },
+    { target: SITE_MODES_COUNT,     suffix: '',  label: 'Modes',    to: '/about#three-modes' },
+    { target: SITE_SCALE_STARS,     suffix: '★', label: 'Scale',    to: '/about#how-we-score' },
+    { target: SITE_SCANS_APPROX,    suffix: '+', label: 'Scans',    to: '/scan' },
   ];
 
   const testimonials = [
@@ -102,7 +108,7 @@ const HomePage = () => {
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.48 }}
             className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-slate-500 text-xs font-medium">
-            <span>10+ foods</span>
+            <span>{SITE_PRODUCTS_APPROX}+ products</span>
             <span className="text-slate-700">·</span>
             <span>3 ways to score</span>
             <span className="text-slate-700">·</span>
@@ -136,7 +142,7 @@ const HomePage = () => {
                       hover:bg-brand-card-2 transition-colors cursor-pointer
                       outline-none focus-visible:ring-2 focus-visible:ring-gold/45 focus-visible:ring-inset"
                   >
-                    <StatNumber value={s.val} />
+                    <StatNumber target={s.target} suffix={s.suffix} delay={i * 140} />
                     <span className="text-slate-300 text-xs sm:text-sm font-semibold uppercase tracking-[0.14em] mt-3 max-w-[12rem] leading-snug">
                       {s.label}
                     </span>

@@ -1,7 +1,8 @@
 // src/data/products.js
-// Sample product data — replace with API call later
+// Core catalog + generated rows — replace with API call later
+import { EXTRA_PRODUCTS } from './extraProducts.js';
 
-export const products = [
+const CORE_PRODUCTS = [
   {
     id: 1,
     name: "Lays Classic Salted",
@@ -183,6 +184,8 @@ export const products = [
     },
   },
 ];
+
+export const products = [...CORE_PRODUCTS, ...EXTRA_PRODUCTS];
 
 export const ageGroups = [
   { value: "kids", label: "Kids (5–12 years)" },

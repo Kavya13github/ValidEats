@@ -19,7 +19,7 @@ const SearchBar = ({ onSelect, value, onChange, placeholder = 'Search product...
   const q = query.toLowerCase();
   const filtered = q.length
     ? products.filter((p) => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || p.category.toLowerCase().includes(q))
-    : products.slice(0, 5);
+    : products.slice(0, 8);
 
   const pick = (p) => {
     setQuery(p.name); setOpen(false);
@@ -57,7 +57,7 @@ const SearchBar = ({ onSelect, value, onChange, placeholder = 'Search product...
               bg-brand-card/95 backdrop-blur-xl shadow-popup overflow-hidden"
           >
             <div className="max-h-64 overflow-y-auto p-1.5">
-              {filtered.slice(0, 8).map((p) => (
+              {filtered.slice(0, 14).map((p) => (
                 <motion.button
                   key={p.id}
                   onClick={() => pick(p)}
