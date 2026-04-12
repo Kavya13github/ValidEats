@@ -1,16 +1,26 @@
 require("dotenv").config();
-const mongoose = require("mongoose");
 const app = require("./app");
-
-// ================= DATABASE CONNECTION =================
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ Database Connected"))
-  .catch(err => console.error("❌ DB Error:", err));
+const connectDB = require("./config/db");
 
 // ================= PORT =================
 const PORT = process.env.PORT || 5000;
 
 // ================= SERVER START =================
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`🔥 Server running on port ${PORT}`);
+  connectDB();
 });
+
+// ================= GRACEFUL SHUTDOWN =================
+const gracefulShutdown = (signal) => {
+  console.log(`\n🛑 ${signal} received. Shutting down gracefully...`);
+  server.close(async () => {
+    const mongoose = require("mongoose");
+    await mongoose.connection.close();
+    console.log("✅ Database connection closed. Bye!");
+    process.exit(0);
+  });
+};
+
+process.on("SIGINT",  () => gracefulShutdown("SIGINT"));
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
