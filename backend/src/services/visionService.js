@@ -67,7 +67,7 @@ Return ONLY valid JSON (no markdown, no extra text):
   "ingredients": ["ingredient1", "ingredient2"],
   "additives": ["additive name (code)"]
 }`;
-
+ 
     const result = await model.generateContent({
       contents: [
         {

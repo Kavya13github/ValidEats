@@ -22,7 +22,7 @@ app.use(cors());
 
 // ================= BODY PARSER =================
 app.use(express.json({ limit: "10mb" }));
-
+ 
 // routes use karo
 app.use("/api/v1", analyzeRoutes);
 

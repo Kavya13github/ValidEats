@@ -42,7 +42,7 @@ Return ONLY JSON:
       "risk": "low/medium/high"
     }
   ],
-
+ 
   "healthImpact": [
     "max 7-8 words each",
     "short crisp points only"
