@@ -4,7 +4,7 @@ ValidEats is a full-stack AI-powered web application that analyzes packaged food
 
 🌐 Live Demo
 🔥 Frontend (User Interface):
-👉 [https://valid-eats.vercel.app](https://valideats.vercel.app)
+👉 [https://valideats.vercel.app](https://valideats.vercel.app)
 ⚡ Backend (API Server):
 👉 [https://valideats.onrender.com](https://valideats.onrender.com)
 
