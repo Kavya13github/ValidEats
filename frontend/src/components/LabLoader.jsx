@@ -1,4 +1,3 @@
-// src/components/LabLoader.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -9,14 +8,12 @@ const LabLoader = ({ label = 'Processing...', size = 'md' }) => {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="relative" style={{ width: d, height: d }}>
-        {/* Outer ring */}
         <motion.div
           className="absolute inset-0 rounded-full"
           style={{ border: '2px solid rgba(0,212,255,0.3)', borderTopColor: '#00d4ff' }}
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
         />
-        {/* Inner ring */}
         <motion.div
           className="absolute rounded-full"
           style={{
@@ -26,7 +23,6 @@ const LabLoader = ({ label = 'Processing...', size = 'md' }) => {
           animate={{ rotate: -360 }}
           transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
         />
-        {/* Core dot */}
         <motion.div
           className="absolute inset-0 flex items-center justify-center"
           animate={{ opacity: [1, 0.3, 1] }}

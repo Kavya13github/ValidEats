@@ -1,11 +1,9 @@
-// src/pages/ScanRatePage.jsx
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ScanUploadBox from '../components/ScanUploadBox';
 import Button from '../components/Button';
 import RatingStars from '../components/RatingStars';
 import HealthBadge from '../components/HealthBadge';
-// NutritionChip replaced by inline ScanNutrientBar
 import AlertBox from '../components/AlertBox';
 import LoaderSpinner from '../components/LoaderSpinner';
 import FloatingOrbs from '../components/FloatingOrbs';
@@ -13,7 +11,6 @@ import { useToast } from '../components/Toast';
 import { scanImage } from '../utils/api';
 import { scanStages } from '../data/scanResults';
 
-/* ── Scan helpers ─────────────────────────────────────────────── */
 const ScanNutrientBar = ({ label, value, unit, max, color, delay = 0 }) => {
   const pct = Math.min(100, Math.round((value / max) * 100));
   return (
@@ -94,7 +91,6 @@ const ScanRatePage = () => {
       <div className="line-grid absolute inset-0 opacity-40 pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-8 pt-24 pb-16">
-        {/* Header */}
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <p className="type-hand-sm text-gold/85 mb-1 normal-case">scan lane</p>
           <h1 className="mb-2 leading-tight">
@@ -105,7 +101,6 @@ const ScanRatePage = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Upload panel */}
           <motion.div initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
             className="space-y-5">
             <div className="card-static p-7 rounded-3xl">
@@ -131,7 +126,6 @@ const ScanRatePage = () => {
                 onClose={reset} />
             )}
 
-            {/* How it works */}
             <div className="card-static p-5 rounded-3xl">
               <p className="label-sm mb-3">How</p>
               <div className="space-y-2">
@@ -149,12 +143,10 @@ const ScanRatePage = () => {
             </div>
           </motion.div>
 
-          {/* Output panel */}
           <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
             className="space-y-4">
             <AnimatePresence mode="wait">
 
-              {/* Idle */}
               {state === 'idle' && (
                 <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                   <div className="card rounded-3xl py-20 text-center border-dashed" style={{ borderColor: 'rgba(20,184,166,0.2)' }}>
@@ -171,11 +163,9 @@ const ScanRatePage = () => {
                 </motion.div>
               )}
 
-              {/* Scanning */}
               {state === 'scanning' && (
                 <motion.div key="scanning" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                   <div className="card-static p-7 rounded-3xl">
-                    {/* Scan visual */}
                     <div className="relative h-32 rounded-2xl overflow-hidden bg-brand-card border border-white/5 mb-6 flex items-center justify-center">
                       <span className="text-5xl z-10 relative">📦</span>
                       <motion.div
@@ -192,7 +182,6 @@ const ScanRatePage = () => {
                       ))}
                     </div>
 
-                    {/* Stages */}
                     <div className="space-y-2.5">
                       {scanStages.map((s, i) => {
                         const done   = i < stage;
@@ -217,10 +206,8 @@ const ScanRatePage = () => {
                 </motion.div>
               )}
 
-              {/* Result */}
               {state === 'done' && result && (
                 <motion.div key="result" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                  {/* Confidence bar */}
                   <div className="flex items-center gap-3 px-4 py-3 mb-4 rounded-2xl"
                     style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.22)' }}>
                     <motion.span
@@ -243,7 +230,6 @@ const ScanRatePage = () => {
                   <div className="rounded-3xl overflow-hidden"
                     style={{ border: `1px solid ${result.status === 'safe' ? 'rgba(34,197,94,0.2)' : result.status === 'risk' ? 'rgba(239,68,68,0.2)' : 'rgba(245,158,11,0.2)'}`, background: '#0D1020' }}>
                     
-                    {/* Lab header */}
                     <div className="px-5 py-3 flex items-center justify-between"
                       style={{ background: `${result.status === 'safe' ? 'rgba(34,197,94,0.04)' : result.status === 'risk' ? 'rgba(239,68,68,0.04)' : 'rgba(245,158,11,0.04)'}`, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                       <span className="text-[10px] font-bold tracking-[0.2em] uppercase"
@@ -253,7 +239,6 @@ const ScanRatePage = () => {
                       <span className="text-[10px] text-slate-600 font-mono">ValidEats AI v2.0</span>
                     </div>
 
-                    {/* Product */}
                     <div className="px-5 pt-5 pb-4 flex items-center justify-between gap-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                       <div>
                         <p className="text-slate-500 text-xs mb-1">Detected Product</p>
@@ -264,9 +249,7 @@ const ScanRatePage = () => {
                     </div>
 
                     <div className="p-5 space-y-5">
-                      {/* Score + verdict */}
                       <div className="flex items-center gap-4">
-                        {/* Mini score ring */}
                         <ScanScoreRing stars={result.stars} status={result.status} />
                         <div>
                           <RatingStars stars={result.stars} size="md" />
@@ -281,7 +264,6 @@ const ScanRatePage = () => {
                         </div>
                       </div>
 
-                      {/* Nutrient bars */}
                       <div className="p-4 rounded-2xl space-y-3"
                         style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)' }}>
                         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-3">Nutritional Profile · per 100g</p>
@@ -292,7 +274,6 @@ const ScanRatePage = () => {
                         <ScanNutrientBar label="Protein"  value={result.nutrition.protein.value}  unit="g"    max={30}  color="#22c55e" delay={0.25} />
                       </div>
 
-                      {/* Risk label chips */}
                       <div className="flex flex-wrap gap-1.5">
                         {result.labels.map((l) => (
                           <span key={l} className="inline-flex items-center text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg"
@@ -302,7 +283,6 @@ const ScanRatePage = () => {
                         ))}
                       </div>
 
-                      {/* Warnings + positives */}
                       {(result.warnings?.length > 0 || result.positives?.length > 0) && (
                         <div className="grid grid-cols-1 gap-3">
                           {result.warnings?.length > 0 && (
@@ -334,7 +314,6 @@ const ScanRatePage = () => {
                         </div>
                       )}
 
-                      {/* AI recommendation */}
                       <div className="p-4 rounded-2xl"
                         style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)' }}>
                         <div className="flex items-center gap-2 mb-2">
@@ -344,7 +323,6 @@ const ScanRatePage = () => {
                         <p className="text-slate-300 text-sm leading-relaxed">{result.suggestion}</p>
                       </div>
 
-                      {/* Alternatives */}
                       <div>
                         <p className="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-2.5">✓ Healthier Alternatives</p>
                         <div className="flex flex-wrap gap-2">

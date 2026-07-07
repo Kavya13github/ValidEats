@@ -1,4 +1,3 @@
-// src/components/ResultCard.jsx — Analysis Lab Report Style
 import React from 'react';
 import { motion } from 'framer-motion';
 import RatingStars from './RatingStars';
@@ -6,7 +5,6 @@ import HealthBadge from './HealthBadge';
 
 const getStatus = (stars) => stars >= 4 ? 'safe' : stars >= 2.5 ? 'caution' : 'risk';
 
-/* ─── Nutrient bar row ─────────────────────────────────────── */
 const NutrientBar = ({ label, value, unit, max, color, delay = 0 }) => {
   const pct = Math.min(100, Math.round((value / max) * 100));
   return (
@@ -35,7 +33,6 @@ const NutrientBar = ({ label, value, unit, max, color, delay = 0 }) => {
   );
 };
 
-/* ─── Score ring ────────────────────────────────────────────── */
 const ScoreRing = ({ stars, status }) => {
   const r = 36;
   const circ = 2 * Math.PI * r;
@@ -69,7 +66,6 @@ const ScoreRing = ({ stars, status }) => {
   );
 };
 
-/* ─── Chip tag ─────────────────────────────────────────────── */
 const Chip = ({ text, variant = 'risk' }) => {
   const styles = {
     risk:    'bg-risk/12 border-risk/30 text-risk',
@@ -84,7 +80,6 @@ const Chip = ({ text, variant = 'risk' }) => {
   );
 };
 
-/* ─── Main Card ─────────────────────────────────────────────── */
 const ResultCard = ({ product, rating, personalized = false, generalRating = null, className = '' }) => {
   if (!product || !rating) return null;
 
@@ -104,7 +99,6 @@ const ResultCard = ({ product, rating, personalized = false, generalRating = nul
       className={`rounded-3xl overflow-hidden ${className}`}
       style={{ border: `1px solid ${borderColor}`, background: '#0D1020' }}
     >
-      {/* ── Header bar ─────────────────────────────────────── */}
       <div
         className="px-5 py-3 flex items-center justify-between gap-2"
         style={{ background: `linear-gradient(90deg, ${accentBg}, transparent)`, borderBottom: `1px solid rgba(255,255,255,0.05)` }}
@@ -117,7 +111,6 @@ const ResultCard = ({ product, rating, personalized = false, generalRating = nul
         <span className="text-[10px] text-slate-600 font-mono">ValidEats AI v2.0</span>
       </div>
 
-      {/* ── Product identity ────────────────────────────────── */}
       <div className="px-5 pt-5 pb-4 flex items-center gap-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
         <div
           className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0"
@@ -134,12 +127,10 @@ const ResultCard = ({ product, rating, personalized = false, generalRating = nul
 
       <div className="p-5 space-y-5">
 
-        {/* ── Score section ────────────────────────────────── */}
         <div className="flex items-center gap-5">
           <ScoreRing stars={stars} status={status} />
           <div className="flex-1 space-y-2">
             <RatingStars stars={stars} size="md" />
-            {/* Comparison bar if personalized */}
             {personalized && generalRating && (
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-[10px] text-slate-600 w-20 shrink-0">General avg</span>
@@ -175,7 +166,6 @@ const ResultCard = ({ product, rating, personalized = false, generalRating = nul
           </div>
         </div>
 
-        {/* ── Nutrient Bars ─────────────────────────────────── */}
         <div
           className="p-4 rounded-2xl space-y-3"
           style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)' }}
@@ -190,7 +180,6 @@ const ResultCard = ({ product, rating, personalized = false, generalRating = nul
           <NutrientBar label="Protein"  value={n.protein || 0} unit="g"    max={30}  color="#22c55e" delay={0.25} />
         </div>
 
-        {/* ── AI Explanation ────────────────────────────────── */}
         {explanation && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -207,7 +196,6 @@ const ResultCard = ({ product, rating, personalized = false, generalRating = nul
           </motion.div>
         )}
 
-        {/* ── Personalized notes ────────────────────────────── */}
         {personalized && notes.length > 0 && (
           <div className="space-y-2">
             {notes.map((note, i) => (
@@ -226,7 +214,6 @@ const ResultCard = ({ product, rating, personalized = false, generalRating = nul
           </div>
         )}
 
-        {/* ── Warnings + Positives grid ──────────────────────── */}
         {(warnings.length > 0 || positives.length > 0) && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {warnings.length > 0 && (
@@ -262,7 +249,6 @@ const ResultCard = ({ product, rating, personalized = false, generalRating = nul
           </div>
         )}
 
-        {/* ── Label warnings (chips) ─────────────────────────── */}
         {n.additives && (
           <div className="flex flex-wrap gap-1.5">
             {n.additives === 'High' && <Chip text="High Additives" variant="risk" />}
@@ -273,7 +259,6 @@ const ResultCard = ({ product, rating, personalized = false, generalRating = nul
           </div>
         )}
 
-        {/* ── Frequency ──────────────────────────────────────── */}
         {frequency_label && (
           <div
             className="flex items-center gap-3 px-4 py-3 rounded-xl"

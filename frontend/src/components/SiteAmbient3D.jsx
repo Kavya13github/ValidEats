@@ -1,5 +1,3 @@
-// src/components/SiteAmbient3D.jsx
-// CSS-only ambient replacement — eliminates WebGL context loss warnings
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -14,7 +12,6 @@ const SiteAmbient3D = () => {
       aria-hidden="true"
       style={{ opacity }}
     >
-      {/* Gold torus-knot CSS orb */}
       <div
         style={{
           position: 'absolute',
@@ -29,7 +26,6 @@ const SiteAmbient3D = () => {
           filter: 'blur(1px)',
         }}
       />
-      {/* Purple icosahedron-style polygon */}
       <div
         style={{
           position: 'absolute',
@@ -44,7 +40,6 @@ const SiteAmbient3D = () => {
           filter: 'blur(0.5px)',
         }}
       />
-      {/* Small cyan accent */}
       <div
         style={{
           position: 'absolute',

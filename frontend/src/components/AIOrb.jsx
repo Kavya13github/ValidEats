@@ -1,4 +1,3 @@
-// src/components/AIOrb.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -13,9 +12,7 @@ const AIOrb = ({ size = 'lg', label = 'VALIDEAT AI', sublabel = 'Health Lab v2.0
 
   return (
     <div className="flex flex-col items-center gap-4">
-      {/* Orb */}
       <div className={`relative ${s.outer} flex items-center justify-center`}>
-        {/* Outer ring pulse */}
         <motion.div
           className="absolute inset-0 rounded-full border border-neon-blue/20"
           animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
@@ -27,7 +24,6 @@ const AIOrb = ({ size = 'lg', label = 'VALIDEAT AI', sublabel = 'Health Lab v2.0
           transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
         />
 
-        {/* Rotating ring */}
         <motion.div
           className={`absolute ${s.inner} rounded-full`}
           style={{ border: '1px solid rgba(0,212,255,0.4)', borderTopColor: 'transparent' }}
@@ -44,7 +40,6 @@ const AIOrb = ({ size = 'lg', label = 'VALIDEAT AI', sublabel = 'Health Lab v2.0
           transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
         />
 
-        {/* Core glow */}
         <motion.div
           className={`${s.core} rounded-full z-10 flex items-center justify-center`}
           style={{
@@ -63,7 +58,6 @@ const AIOrb = ({ size = 'lg', label = 'VALIDEAT AI', sublabel = 'Health Lab v2.0
         </motion.div>
       </div>
 
-      {/* Label */}
       <div className="text-center">
         <p className="hud-label neon-text">{label}</p>
         <p className="text-xs text-gray-500 font-mono mt-0.5">{sublabel}</p>

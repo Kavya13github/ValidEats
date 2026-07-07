@@ -1,5 +1,3 @@
-// src/components/AnimatedBackground.jsx
-// Global canvas-based moving particle network — zero dependency on Three.js
 import React, { useRef, useEffect } from 'react';
 
 const PARTICLE_COUNT = 52;
@@ -73,7 +71,6 @@ const AnimatedBackground = () => {
 
       particles.forEach((p) => { p.update(w, h); p.draw(ctx); });
 
-      // Connect nearby particles
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const a = particles[i], b = particles[j];
@@ -90,7 +87,6 @@ const AnimatedBackground = () => {
           }
         }
 
-        // Connect to mouse
         const p = particles[i];
         const mdx = p.x - mouse.x, mdy = p.y - mouse.y;
         const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
@@ -102,7 +98,6 @@ const AnimatedBackground = () => {
           ctx.strokeStyle = `rgba(${GOLD}, ${alpha})`;
           ctx.lineWidth = 1;
           ctx.stroke();
-          // Draw a highlight dot on the particle near mouse
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r * 1.8, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(${GOLD}, ${alpha * 1.5})`;

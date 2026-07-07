@@ -1,4 +1,3 @@
-// src/components/NutritionChip.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 

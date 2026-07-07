@@ -1,4 +1,3 @@
-// src/components/Toast.jsx
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -26,7 +25,6 @@ export const ToastProvider = ({ children }) => {
   return (
     <ToastContext.Provider value={{ show }}>
       {children}
-      {/* Toast portal */}
       <div className="fixed bottom-6 right-6 z-[200] flex flex-col gap-3 pointer-events-none">
         <AnimatePresence mode="sync">
           {toasts.map((toast) => {

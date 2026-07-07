@@ -1,4 +1,3 @@
-// src/components/InfoCard.jsx
 import React from 'react';
 
 const InfoCard = ({

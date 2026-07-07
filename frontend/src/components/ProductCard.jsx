@@ -1,4 +1,3 @@
-// src/components/ProductCard.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +27,6 @@ const ProductCard = ({ product, onClick, selected = false, showRating = false, c
         ${className}
       `}
     >
-      {/* Image */}
       <div className="relative h-44 overflow-hidden"
         style={{ background: 'linear-gradient(180deg, rgba(26,31,53,0.5), rgba(18,23,43,0.9))' }}>
         <img
@@ -42,7 +40,6 @@ const ProductCard = ({ product, onClick, selected = false, showRating = false, c
           {product.emoji}
         </div>
 
-        {/* Category */}
         <div className="absolute top-3 left-3">
           <span className="text-xs bg-black/50 text-slate-300 px-2.5 py-1 rounded-xl border border-white/10 backdrop-blur-sm font-medium">
             {product.category}
@@ -56,16 +53,13 @@ const ProductCard = ({ product, onClick, selected = false, showRating = false, c
           </motion.div>
         )}
 
-        {/* Gradient fade */}
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-brand-card to-transparent" />
 
-        {/* Emoji overlay */}
         <div className="absolute bottom-3 right-3 text-3xl opacity-80 group-hover:scale-110 transition-transform">
           {product.emoji}
         </div>
       </div>
 
-      {/* Body */}
       <div className="p-4 pt-3">
         <h3 className="text-slate-100 font-bold text-sm leading-tight mb-0.5">{product.name}</h3>
         <p className="text-slate-600 text-xs mb-3">{product.brand}</p>
@@ -77,7 +71,6 @@ const ProductCard = ({ product, onClick, selected = false, showRating = false, c
           </div>
         )}
 
-        {/* Mini nutrition row */}
         <div className="grid grid-cols-3 gap-1 text-center pt-3 border-t border-white/5">
           <div>
             <p className="text-slate-200 font-bold text-xs">{product.nutrition.calories}</p>

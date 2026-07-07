@@ -8,16 +8,10 @@ const analyzeRoutes = require("./routes/analyzeRoutes");
 
 const app = express();
 
-// ================= SECURITY =================
 app.use(helmet());
-
-// ================= PERFORMANCE =================
 app.use(compression());
-
-// ================= LOGGING =================
 app.use(morgan("dev"));
 
-// ================= CORS =================
 const corsOptions = {
   origin: [
     'https://valideats.vercel.app',
@@ -30,13 +24,10 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// ================= BODY PARSER =================
 app.use(express.json({ limit: "10mb" }));
 
-// routes use karo
 app.use("/api/v1", analyzeRoutes);
 
-// ================= HEALTH CHECK =================
 app.get("/", (req, res) => {
   res.json({
     status: "OK",
@@ -45,10 +36,8 @@ app.get("/", (req, res) => {
   });
 });
 
-// ================= GLOBAL ERROR HANDLER =================
 app.use((err, req, res, next) => {
   console.error("🔥 Global Error:", err);
-
   res.status(500).json({
     success: false,
     message: "Something broke!",

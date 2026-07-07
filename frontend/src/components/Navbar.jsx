@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -36,7 +35,6 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
 
-          {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group" aria-label="ValidEats Home">
             <motion.img
               src={logo}
@@ -52,7 +50,6 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-1">
             {links.map((link) => {
               const active = pathname === link.path;
@@ -72,7 +69,6 @@ const Navbar = () => {
             })}
           </div>
 
-          {/* CTA */}
           <div className="hidden md:flex items-center gap-3">
             <Link to="/scan">
               <motion.button
@@ -85,7 +81,6 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Mobile toggle */}
           <button
             onClick={() => setMenuOpen((v) => !v)}
             className="md:hidden p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all"
@@ -103,7 +98,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div

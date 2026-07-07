@@ -1,4 +1,3 @@
-// src/components/ScanUploadBox.jsx
 import React, { useState, useRef } from 'react';
 import Button from './Button';
 
@@ -16,11 +15,9 @@ const ScanUploadBox = ({ onImageSelected, scanning = false, className = '' }) =>
   return (
     <div className={className}>
       {preview ? (
-        /* Image preview with scan overlay */
         <div className="relative rounded-xl overflow-hidden border border-gold/30 bg-charcoal-900">
           <img src={preview} alt="Food packet" className="w-full max-h-72 object-contain" />
 
-          {/* Corner brackets */}
           {['top-0 left-0 border-t border-l', 'top-0 right-0 border-t border-r',
             'bottom-0 left-0 border-b border-l', 'bottom-0 right-0 border-b border-r'
           ].map((pos, i) => (
@@ -49,7 +46,6 @@ const ScanUploadBox = ({ onImageSelected, scanning = false, className = '' }) =>
           )}
         </div>
       ) : (
-        /* Drop zone */
         <div
           onDrop={(e) => { e.preventDefault(); setDragging(false); handle(e.dataTransfer.files[0]); }}
           onDragOver={(e) => { e.preventDefault(); setDragging(true); }}

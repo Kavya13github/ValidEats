@@ -1,4 +1,3 @@
-// src/components/Button.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { HiStar, HiCamera } from 'react-icons/hi2';
@@ -19,7 +18,6 @@ const sizes = {
   xl:  'px-9 py-4 text-lg gap-3',
 };
 
-/** Same emoji strings as before — on gold we swap for dark SVGs so layout stays even. */
 const GOLD_ICON_MAP = {
   '⭐': HiStar,
   '📸': HiCamera,

@@ -1,4 +1,3 @@
-// src/pages/ResultPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -74,7 +73,6 @@ const ResultPage = () => {
       <div className="grid-bg absolute inset-0 opacity-40 pointer-events-none" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 md:px-8 pt-24 pb-16">
-        {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-slate-600 mb-6">
           <Link to="/" className="hover:text-gold transition-colors">Home</Link>
           <span className="text-slate-700">›</span>
@@ -83,7 +81,6 @@ const ResultPage = () => {
           <span className="text-slate-400 font-medium">{product.name}</span>
         </div>
 
-        {/* Hero card */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className={`rounded-3xl border ${borderColor} overflow-hidden mb-6`}>
             <div className="grid grid-cols-1 md:grid-cols-2">
@@ -124,7 +121,6 @@ const ResultPage = () => {
           </div>
         </motion.div>
 
-        {/* Nutrition */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
           <div className="card-static p-6 rounded-3xl mb-5">
             <p className="label-sm mb-3">Nutrition / 100g</p>
@@ -140,7 +136,6 @@ const ResultPage = () => {
           </div>
         </motion.div>
 
-        {/* Good/Bad */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
           <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }}>
             <div className="card-static rounded-3xl p-5 h-full border border-safe/15">
@@ -168,7 +163,6 @@ const ResultPage = () => {
           </motion.div>
         </div>
 
-        {/* Explanation */}
         {rating?.explanation && (
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
             <div className="card-static p-6 rounded-3xl mb-5">
@@ -178,7 +172,6 @@ const ResultPage = () => {
           </motion.div>
         )}
 
-        {/* Frequency & Alternatives */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
           {rating?.frequency_label && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
@@ -203,7 +196,6 @@ const ResultPage = () => {
           </motion.div>
         </div>
 
-        {/* CTA */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
           <div className="card-static p-6 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-4"
             style={{ background: 'linear-gradient(135deg, rgba(212,175,55,0.05), transparent)' }}>

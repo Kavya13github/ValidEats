@@ -1,5 +1,3 @@
-// src/components/GlobalAmbientMotion.jsx
-// Site-wide, fixed, low-contrast motion behind all pages (relaxing; matches gold / navy vibe).
 import React from 'react';
 
 const GlobalAmbientMotion = () => (

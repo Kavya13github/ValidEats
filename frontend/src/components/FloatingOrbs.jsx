@@ -1,5 +1,3 @@
-// src/components/FloatingOrbs.jsx
-// Decorative animated background orbs — drop into any page section
 import React from 'react';
 
 const configs = {

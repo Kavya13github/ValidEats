@@ -1,5 +1,3 @@
-// src/components/HeroScene.jsx
-// React Three Fiber — hero ring + abstract food-inspired 3D shapes
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import {
@@ -13,7 +11,6 @@ import {
   Cylinder,
 } from '@react-three/drei';
 
-/* ── Animated golden torus ring ── */
 const GoldenRing = () => {
   const ref = useRef();
   useFrame((state) => {
@@ -37,7 +34,6 @@ const GoldenRing = () => {
   );
 };
 
-/* ── Inner glowing sphere ── */
 const GlowSphere = () => {
   const ref = useRef();
   useFrame((state) => {
@@ -64,7 +60,6 @@ const GlowSphere = () => {
   );
 };
 
-/* ── Mini apple (abstract) ── */
 const MiniApple = () => (
   <group scale={0.42}>
     <Sphere args={[0.38, 28, 28]} position={[0, 0, 0]}>
@@ -85,7 +80,6 @@ const MiniApple = () => (
   </group>
 );
 
-/* ── Mini donut ── */
 const MiniDonut = () => (
   <group scale={0.55} rotation={[0.4, 0.6, 0]}>
     <Torus args={[0.32, 0.11, 14, 40]}>
@@ -103,7 +97,6 @@ const MiniDonut = () => (
   </group>
 );
 
-/* ── Carrot-ish cone ── */
 const MiniCarrot = () => (
   <group scale={0.5} rotation={[0, 0, -0.8]}>
     <Cone args={[0.12, 0.48, 10]} position={[0, 0.1, 0]}>
@@ -121,7 +114,6 @@ const MiniCarrot = () => (
   </group>
 );
 
-/* ── Orbits a child mesh around the Y axis ── */
 const FoodOrbit = ({ radius, speed, yOffset = 0, phase = 0, children }) => {
   const ref = useRef();
   useFrame((state) => {
@@ -135,7 +127,6 @@ const FoodOrbit = ({ radius, speed, yOffset = 0, phase = 0, children }) => {
   return <group ref={ref}>{children}</group>;
 };
 
-/* ── Floating octahedron satellites ── */
 const Satellite = ({ position, color, speed, scale = 1 }) => {
   const ref = useRef();
   useFrame((state) => {
@@ -160,7 +151,6 @@ const Satellite = ({ position, color, speed, scale = 1 }) => {
   );
 };
 
-/* ── Full scene ── */
 const Scene = () => {
   const groupRef = useRef();
   useFrame((state) => {

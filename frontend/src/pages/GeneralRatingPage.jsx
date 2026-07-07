@@ -1,4 +1,3 @@
-// src/pages/GeneralRatingPage.jsx
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SearchBar from '../components/SearchBar';
@@ -50,7 +49,6 @@ const GeneralRatingPage = () => {
       <div className="line-grid absolute inset-0 opacity-40 pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 pt-24 pb-16">
-        {/* Header */}
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-8">
           <p className="type-hand-sm text-gold/85 mb-1 normal-case">general lane</p>
           <h1 className="mb-2 leading-tight">
@@ -61,11 +59,9 @@ const GeneralRatingPage = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* ── Left panel ── */}
           <motion.div initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1, duration: 0.6 }}
             className="lg:col-span-2 space-y-4">
 
-            {/* Step 1 */}
             <div className="card-static p-6 rounded-3xl">
               <div className="flex items-center gap-3 mb-5">
                 <span className="step-num">1</span>
@@ -93,7 +89,6 @@ const GeneralRatingPage = () => {
               </div>
             </div>
 
-            {/* Step 2 */}
             <div className="card-static p-6 rounded-3xl">
               <div className="flex items-center gap-3 mb-4">
                 <span className="step-num">2</span>
@@ -104,7 +99,6 @@ const GeneralRatingPage = () => {
                 helper="Needs differ by age." />
             </div>
 
-            {/* Selected indicator */}
             <AnimatePresence>
               {selected && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
@@ -130,7 +124,6 @@ const GeneralRatingPage = () => {
             </Button>
           </motion.div>
 
-          {/* ── Right panel ── */}
           <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2, duration: 0.6 }}
             className="lg:col-span-3 space-y-6">
             <AnimatePresence mode="wait">
@@ -161,7 +154,6 @@ const GeneralRatingPage = () => {
               )}
             </AnimatePresence>
 
-            {/* Product browser */}
             <div>
               <p className="text-slate-600 text-[10px] uppercase tracking-wider font-semibold mb-3">More foods</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

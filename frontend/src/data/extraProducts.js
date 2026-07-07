@@ -1,6 +1,3 @@
-// src/data/extraProducts.js
-// 200 generated catalog items (ids 11–210) — search & browse; ratings fall back to defaults in ratings.js
-
 const UNSPLASH = [
   'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=400&q=80',
   'https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&q=80',

@@ -8,12 +8,6 @@ const durationForTarget = (n) => {
   return 1400;
 };
 
-/**
- * Large stat figures — Italianno + count-up from 0 (relaxing ease-out).
- * @param {number} target — final integer (e.g. 1000, 10000, 3, 5)
- * @param {string} [suffix] — e.g. '+', '★', ''
- * @param {number} [delay] — ms before counting starts (stagger columns)
- */
 const StatNumber = ({ target, suffix = '', className = '', delay = 0, duration: durationProp }) => {
   const [n, setN] = useState(0);
   const rafRef = useRef(null);

@@ -2,9 +2,6 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// ═══════════════════════════════════════════
-// Used by POST /api/v1/analyze (manual input)
-// ═══════════════════════════════════════════
 exports.generateAIResponse = async (product, nutrition, user, baseScore) => {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
@@ -80,10 +77,6 @@ EXAMPLES of correct length:
   }
 };
 
-// ═══════════════════════════════════════════
-// Used by POST /api/v1/scan (image scan)
-// Generates a COMPREHENSIVE but CONCISE report
-// ═══════════════════════════════════════════
 exports.generateScanReport = async (productData, user) => {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });

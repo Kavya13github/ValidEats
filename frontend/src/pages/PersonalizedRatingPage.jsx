@@ -1,4 +1,3 @@
-// src/pages/PersonalizedRatingPage.jsx
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import InputField from '../components/InputField';
@@ -75,7 +74,6 @@ const PersonalizedRatingPage = () => {
       <div className="grid-bg absolute inset-0 opacity-40 pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 pt-24 pb-16">
-        {/* Header */}
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <p className="type-hand-sm text-gold/85 mb-1 normal-case">your lane</p>
           <h1 className="mb-2 leading-tight">
@@ -85,7 +83,6 @@ const PersonalizedRatingPage = () => {
           <p className="type-hand-sm text-slate-500 max-w-md normal-case">same star language — just tuned to the body you actually live in.</p>
         </motion.div>
 
-        {/* Step indicator */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
           className="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
           {steps.map((s, i) => (
@@ -101,12 +98,10 @@ const PersonalizedRatingPage = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* ── Form ── */}
           <motion.div initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }}
             className="lg:col-span-3">
             <form onSubmit={submit} className="space-y-4">
 
-              {/* Step 1 — Profile */}
               <AnimatePresence mode="wait">
               {step === 1 && (
                 <motion.div key="step1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
@@ -147,7 +142,6 @@ const PersonalizedRatingPage = () => {
                     onChange={set} options={frequencies} required error={errors.frequency}
                     helper="Daily consumption compounds all health risks significantly." />
 
-                  {/* Condition badges explanation */}
                   <div className="bg-brand-card/60 rounded-2xl p-4 border border-white/5 text-xs text-slate-500 leading-relaxed">
                     💡 <strong className="text-slate-400">Tip:</strong> If you're healthy, select "None" — you'll still get a score based on general health guidelines.
                   </div>
@@ -193,7 +187,6 @@ const PersonalizedRatingPage = () => {
               )}
               </AnimatePresence>
 
-              {/* All-steps submit shortcut when fully filled */}
               {step < 3 && form.age && form.healthCondition && form.frequency && product && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                   <Button type="submit" onClick={submit} loading={loading} fullWidth size="lg" icon="🧬">
@@ -204,11 +197,9 @@ const PersonalizedRatingPage = () => {
             </form>
           </motion.div>
 
-          {/* ── Output panel ── */}
           <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
             className="lg:col-span-2 space-y-4">
 
-            {/* How it works */}
             <div className="card-static p-6 rounded-3xl">
               <p className="label-sm mb-4">Why this works</p>
               <div className="space-y-3.5">

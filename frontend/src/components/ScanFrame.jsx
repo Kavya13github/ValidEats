@@ -1,11 +1,9 @@
-// src/components/ScanFrame.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 
 const ScanFrame = ({ children, scanning = false, className = '' }) => {
   return (
     <div className={`relative rounded-xl overflow-hidden ${className}`}>
-      {/* Corner brackets */}
       {['top-0 left-0 border-t border-l', 'top-0 right-0 border-t border-r',
         'bottom-0 left-0 border-b border-l', 'bottom-0 right-0 border-b border-r'
       ].map((pos, i) => (
@@ -16,7 +14,6 @@ const ScanFrame = ({ children, scanning = false, className = '' }) => {
         />
       ))}
 
-      {/* Scan line */}
       {scanning && (
         <>
           <motion.div
@@ -26,7 +23,6 @@ const ScanFrame = ({ children, scanning = false, className = '' }) => {
             animate={{ top: '105%' }}
             transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
           />
-          {/* Grid overlay */}
           <div className="absolute inset-0 z-10 pointer-events-none"
             style={{
               backgroundImage: 'linear-gradient(rgba(0,212,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.05) 1px, transparent 1px)',

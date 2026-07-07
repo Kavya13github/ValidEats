@@ -1,4 +1,3 @@
-// src/components/NeonButton.jsx
 import React from 'react';
 
 const variants = {

@@ -1,4 +1,3 @@
-// Soft drifting “kitchen light” + floating food motifs — sits behind section content
 import React, { useMemo } from 'react';
 
 const GLYPHS = ['🍎', '🥕', '🥬', '🍋', '🫐', '🥑', '🍞', '🧀', '🥛', '🍇', '🌾', '🍊'];

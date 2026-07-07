@@ -1,11 +1,7 @@
-// backend/src/services/visionService.js
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-/**
- * Detect MIME type from image buffer magic bytes
- */
 function detectMimeType(buffer) {
   if (!buffer || buffer.length < 4) return "image/jpeg";
   const b = buffer;
@@ -14,33 +10,24 @@ function detectMimeType(buffer) {
   if (b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4E && b[3] === 0x47) return "image/png";
   if (b[0] === 0x47 && b[1] === 0x49 && b[2] === 0x46)         return "image/gif";
   if (b[0] === 0x52 && b[1] === 0x49 && b[2] === 0x46 && b[3] === 0x46) return "image/webp";
-  return "image/jpeg"; // safe fallback
+  return "image/jpeg";
 }
 
-/**
- * Clean AI text response and parse JSON safely
- */
 function parseJsonSafe(text) {
   if (!text) return null;
-  // Remove ```json ... ``` or ``` ... ``` fences
   let cleaned = text
     .replace(/```json[\s\S]*?```/g, (m) => m.replace(/```json|```/g, ""))
     .replace(/```[\s\S]*?```/g, (m) => m.replace(/```/g, ""))
     .trim();
 
-  // Extract first {...} block if extra text around it
   const match = cleaned.match(/\{[\s\S]*\}/);
   if (match) cleaned = match[0];
 
   return JSON.parse(cleaned);
 }
 
-/**
- * Extract nutrition data from a food label image using Gemini Vision
- */
 exports.extractNutritionFromImage = async (imageBuffer) => {
   try {
-    // gemini-2.5-flash supports multimodal vision
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const mimeType = detectMimeType(imageBuffer);
@@ -67,7 +54,7 @@ Return ONLY valid JSON (no markdown, no extra text):
   "ingredients": ["ingredient1", "ingredient2"],
   "additives": ["additive name (code)"]
 }`;
- 
+
     const result = await model.generateContent({
       contents: [
         {
@@ -95,7 +82,6 @@ Return ONLY valid JSON (no markdown, no extra text):
   } catch (error) {
     console.error("❌ Vision Error:", error?.message || error);
 
-    // Return a sensible fallback so the scan doesn't completely fail
     return {
       product: "Food Product",
       brand: "Unknown Brand",

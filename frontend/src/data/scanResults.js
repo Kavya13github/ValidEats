@@ -1,6 +1,3 @@
-// src/data/scanResults.js
-// Dummy scan result — replace with AI API call later
-
 export const dummyScanResult = {
   detected: "Maggi Masala Noodles",
   brand: "Nestlé",

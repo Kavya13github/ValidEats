@@ -1,5 +1,3 @@
-// src/data/products.js
-// Core catalog + generated rows — replace with API call later
 import { EXTRA_PRODUCTS } from './extraProducts.js';
 
 const CORE_PRODUCTS = [

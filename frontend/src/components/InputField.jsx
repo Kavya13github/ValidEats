@@ -1,4 +1,3 @@
-// src/components/InputField.jsx
 import React from 'react';
 
 const InputField = ({ label, name, type = 'text', value, onChange, placeholder, icon, error, helper, required, className = '' }) => (

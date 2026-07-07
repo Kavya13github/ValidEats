@@ -1,4 +1,3 @@
-// src/components/Footer.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
@@ -7,16 +6,13 @@ const Footer = () => (
   <footer className="relative z-10 overflow-hidden border-t border-gold/10 backdrop-blur-md"
     style={{ background: 'linear-gradient(180deg, rgba(8,11,20,0.82) 0%, rgba(8,10,20,0.94) 55%, rgba(6,8,16,0.97) 100%)' }}>
 
-    {/* Top gold line */}
     <div className="gold-divider" />
 
-    {/* Background glow */}
     <div className="orb orb-gold absolute" style={{ width: 300, height: 300, bottom: '-80px', left: '20%', opacity: 0.15 }} />
 
     <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-14">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
 
-        {/* Brand */}
         <div className="md:col-span-2">
           <div className="flex items-center gap-3 mb-5">
             <img src={logo} alt="ValidEats" className="h-14 w-auto object-contain"
@@ -35,7 +31,6 @@ const Footer = () => (
           </div>
         </div>
 
-        {/* Links */}
         <div>
           <p className="text-gold text-xs font-bold tracking-wide uppercase mb-4">App</p>
           <ul className="space-y-2.5">
@@ -55,7 +50,6 @@ const Footer = () => (
           </ul>
         </div>
 
-        {/* Rating guide */}
         <div>
           <p className="text-gold text-xs font-bold tracking-wide uppercase mb-3">Stars</p>
           <ul className="space-y-2">

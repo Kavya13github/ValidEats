@@ -1,4 +1,3 @@
-// src/components/GlassCard.jsx
 import React from 'react';
 
 const GlassCard = ({

@@ -41,14 +41,12 @@
     filter: blur(0.4px);
   }
 
-  /* ── Better scrollbar ── */
   ::-webkit-scrollbar       { width: 4px; }
   ::-webkit-scrollbar-track { background: #080B14; }
   ::-webkit-scrollbar-thumb { background: linear-gradient(#D4AF37, #8B6914); border-radius: 4px; }
 
   ::selection { background: rgba(212,175,55,0.25); color: #fff; }
 
-  /* ── heading defaults: tight tracking reads “designed” without wide display fonts ── */
   h1, h2 { letter-spacing: -0.045em; line-height: 1.06; }
   h3 { letter-spacing: -0.03em; line-height: 1.12; }
   p { line-height: 1.62; letter-spacing: 0.01em; }
@@ -56,9 +54,6 @@
 
 @layer components {
 
-  /* ════════════════════════════════════════
-     LAYOUT
-  ════════════════════════════════════════ */
   .page-wrap    { @apply min-h-screen relative; }
   .page-shell   { @apply min-h-screen relative overflow-hidden; background: radial-gradient(circle at top left, rgba(96,165,250,0.08), transparent 25%), linear-gradient(180deg, rgba(9,16,32,0.95) 0%, rgba(7,11,20,0.98) 100%); }
   .section-pad  { @apply py-14 md:py-20 px-4; }
@@ -80,10 +75,6 @@
     color: #080B14;
   }
 
-
-  /* ════════════════════════════════════════
-     BACKGROUNDS — varies per section
-  ════════════════════════════════════════ */
   .bg-page   { background: #080B14; }
   .bg-page-2 {
     background: linear-gradient(180deg, #0D1020 0%, #13101F 100%);
@@ -95,9 +86,6 @@
     background: linear-gradient(180deg, #130E06 0%, #0D0A14 100%);
   }
 
-  /* ════════════════════════════════════════
-     CARDS
-  ════════════════════════════════════════ */
   .card {
     background: linear-gradient(145deg, rgba(26,31,53,0.85), rgba(18,23,43,0.9));
     border: 1px solid rgba(212,175,55,0.1);
@@ -119,9 +107,6 @@
     backdrop-filter: blur(12px);
   }
 
-  /* ════════════════════════════════════════
-     GOLD TEXT & GRADIENTS
-  ════════════════════════════════════════ */
   .gold-text {
     background: linear-gradient(135deg, #F0D060 0%, #D4AF37 50%, #A88A1A 100%);
     -webkit-background-clip: text;
@@ -151,9 +136,6 @@
     background: linear-gradient(90deg, transparent, rgba(212,175,55,0.2), transparent);
   }
 
-  /* ════════════════════════════════════════
-     BUTTONS
-  ════════════════════════════════════════ */
   .btn-gold {
     background: linear-gradient(135deg, #D4AF37, #A88A1A);
     color: #080B14;
@@ -190,9 +172,6 @@
     transform: translateY(-2px);
   }
 
-  /* ════════════════════════════════════════
-     FORM INPUTS
-  ════════════════════════════════════════ */
   .field {
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     width: 100%;
@@ -213,9 +192,6 @@
     box-shadow: 0 0 0 3px rgba(212,175,55,0.1), 0 4px 16px rgba(0,0,0,0.3);
   }
 
-  /* ════════════════════════════════════════
-     LABELS / TAGS
-  ════════════════════════════════════════ */
   .label-sm {
     display: inline-flex; align-items: center; gap: 6px;
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -231,9 +207,6 @@
     border: 1px solid;
   }
 
-  /* ════════════════════════════════════════
-     DECORATIVE BACKGROUND ELEMENTS
-  ════════════════════════════════════════ */
   .orb {
     position: absolute;
     border-radius: 9999px;
@@ -247,7 +220,6 @@
   .orb-teal  { background: rgba(20,184,166,0.15); animation: pulseGlow 9s ease-in-out infinite 3s; }
   .orb-pink  { background: rgba(236,72,153,0.15); animation: pulseGlow 8s ease-in-out infinite 4s; }
 
-  /* ── Home: soft “alive” food ambience (behind section UI) ── */
   .food-ambient-mesh {
     position: absolute;
     inset: -35%;
@@ -275,12 +247,10 @@
   }
   .food-ambient-layer--hero .food-float { opacity: 0.11; }
 
-  /* Grid dot background */
   .grid-bg {
     background-image: radial-gradient(rgba(212,175,55,0.07) 1px, transparent 1px);
     background-size: 32px 32px;
   }
-  /* Faint line grid */
   .line-grid {
     background-image:
       linear-gradient(rgba(212,175,55,0.04) 1px, transparent 1px),
@@ -288,9 +258,6 @@
     background-size: 48px 48px;
   }
 
-  /* ════════════════════════════════════════
-     SCAN ANIMATION
-  ════════════════════════════════════════ */
   .scan-line {
     position: absolute; left: 0; right: 0;
     height: 2px;
@@ -299,9 +266,6 @@
     animation: scanBeat 2s linear infinite;
   }
 
-  /* ════════════════════════════════════════
-     STAT NUMBER (elegant script + soft gold drift)
-  ════════════════════════════════════════ */
   @keyframes stat-gold-drift {
     0%, 100% { background-position: 0% 50%; }
     50%      { background-position: 100% 50%; }
@@ -338,9 +302,6 @@
     .stat-number-face { animation: none; background-position: 40% 50%; }
   }
 
-  /* ════════════════════════════════════════
-     NOTION-STYLE DOT GRID (global bg)
-  ════════════════════════════════════════ */
   .notion-grid {
     background-image: radial-gradient(rgba(212,175,55,0.06) 1px, transparent 1px);
     background-size: 28px 28px;
@@ -362,9 +323,6 @@
     background: linear-gradient(135deg, #080B14 0%, #0D1020 45%, #12101C 100%);
   }
 
-  /* ════════════════════════════════════════
-     GLOBAL AMBIENT (fixed, full viewport — behind UI)
-  ════════════════════════════════════════ */
   @keyframes global-ambient-drift-a {
     0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.42; }
     50%      { transform: translate(6vmin, -5vmin) scale(1.08); opacity: 0.55; }
@@ -390,7 +348,6 @@
     overflow: hidden;
   }
 
-  /* WebGL layer: no interaction; opacity controlled in JSX by route */
   .site-ambient-3d canvas {
     display: block;
     outline: none;
@@ -459,9 +416,6 @@
     .global-ambient__sheen { opacity: 0.4; transform: none; }
   }
 
-  /* ════════════════════════════════════════
-     TOOLTIP / POPUP BASE
-  ════════════════════════════════════════ */
   .popup-overlay {
     position: fixed; inset: 0;
     background: rgba(8,11,20,0.8);
@@ -479,16 +433,11 @@
     position: relative; overflow: hidden;
   }
 
-  /* ════════════════════════════════════════
-     TYPOGRAPHY HELPERS
-  ════════════════════════════════════════ */
-  /* Headline style: UI sans, tight tracking (use font-bold / font-extrabold in markup) */
   .serif {
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     letter-spacing: -0.045em;
   }
 
-  /* Italianno — formal script (signature headlines; keep phrases short) */
   .type-elegant {
     font-family: 'Italianno', cursive;
     font-weight: 400;
@@ -502,7 +451,6 @@
     line-height: 1.02;
     color: #fafafa;
   }
-  /* Caveat — readable “jotted down” notes (pairs with Italianno) */
   .type-hand {
     font-family: 'Caveat', cursive;
     font-weight: 600;

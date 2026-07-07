@@ -1,5 +1,3 @@
-// src/components/Page3DAccent.jsx
-// Lightweight 3D accents — rings, nutrition mesh, bowl / snack abstractions
 import React, { useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Torus, Icosahedron, MeshDistortMaterial, Sphere, Box } from '@react-three/drei';
@@ -52,7 +50,6 @@ const SpinIco = ({ color, emissive }) => {
   );
 };
 
-/* Scan / lens — twin rings */
 const SpinSplit = ({ color, emissive }) => {
   const ref = useRef();
   useFrame((state) => {
@@ -74,7 +71,6 @@ const SpinSplit = ({ color, emissive }) => {
   );
 };
 
-/* Bowl + garnish orbs */
 const SpinBowl = ({ color, emissive }) => {
   const ref = useRef();
   useFrame((state) => {
@@ -108,7 +104,6 @@ const SpinBowl = ({ color, emissive }) => {
   );
 };
 
-/* Cracker / bar + ring */
 const SpinSnack = ({ color, emissive }) => {
   const ref = useRef();
   useFrame((state) => {
