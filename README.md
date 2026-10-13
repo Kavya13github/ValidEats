@@ -9,7 +9,7 @@
 
 | Service | URL |
 |---|---|
-| 🔥 Frontend (User Interface) | [https://valid-eats.vercel.app](https://valid-eats.vercel.app) |
+| 🔥 Frontend (User Interface) | [https://valideats.vercel.app](https://valid-eats.vercel.app) |
 | ⚡ Backend (API Server) | [https://valideats-backend.onrender.com](https://valideats-backend.onrender.com) |
 
 ---
