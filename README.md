@@ -1,7 +1,7 @@
-# 🥗 ValidEats — AI-Powered Food Health Analyzer
+# 🥗 ValidEats: AI-Powered Food Health Analyser
 
 > Built with React + Node.js + AI  
-> A full-stack web application that scans packaged food products using OCR + AI to deliver health scores, ingredient insights, risk tags, and personalized dietary recommendations — instantly.
+> A full-stack web application that scans packaged food products using OCR + AI to deliver health scores, ingredient insights, risk tags, and personalised dietary recommendations instantly.
 
 ---
 
@@ -19,15 +19,15 @@
 **ValidEats** is a food-tech AI application for health-conscious users. A user either manually enters nutrition data or uploads a photo of a food package label, and the system:
 
 1. **Extracts** raw nutrition info and ingredients from the image using **Google Gemini Vision (OCR)**
-2. **Analyzes** extracted data using a custom **health scoring algorithm** (calories, sugar, sodium, fat, fiber, etc.)
+2. **Analyses** extracted data using a custom **health scoring algorithm** (calories, sugar, sodium, fat, fibre, etc.)
 3. **Generates** AI-powered insights via **Google Gemini API**, including:
-   - **Health Score** (0–100) — based on nutritional composition
-   - **Health Verdict** — Excellent / Good / Moderate / Poor / Harmful
-   - **Health Tags** — e.g. 🔴 High Sugar, 🟡 High Sodium, 🟢 Good Fiber
-   - **Ingredient-level breakdown** — additives & preservative detection
-   - **General Rating** — objective nutritional score for any user
-   - **Personalized Rating** — score adjusted for user's **age** and **health conditions** (diabetes, hypertension, obesity, etc.)
-   - **Recommendation** — tailored dietary advice
+   - **Health Score** (0–100) : based on nutritional composition
+   - **Health Verdict** : Excellent / Good / Moderate / Poor / Harmful
+   - **Health Tags** : e.g. 🔴 High Sugar, 🟡 High Sodium, 🟢 Good Fiber
+   - **Ingredient-level breakdown** : additives & preservative detection
+   - **General Rating** : objective nutritional score for any user
+   - **Personalized Rating** : score adjusted for user's **age** and **health conditions** (diabetes, hypertension, obesity, etc.)
+   - **Recommendation** : tailored dietary advice
 4. **Saves** results to **MongoDB Atlas** for future reference
 5. Supports **Scan Mode** (upload food package image) and **Manual Mode** (enter nutrition values)
 
@@ -35,16 +35,16 @@
 
 ## ✨ Key Features
 
-- 📸 **Image Scan Mode** — upload a food package photo; OCR extracts all data automatically
-- ✍️ **Manual Entry Mode** — enter nutrition values directly for instant analysis
-- 🤖 **AI Health Analysis** — powered by Google Gemini for deep nutritional insights
-- ⭐ **General Rating** — universal health score for the product
-- 👤 **Personalized Rating** — adjusted for your age and medical conditions
-- ⚠️ **Risk Tags & Warnings** — visual flags for high sugar, sodium, trans fat, etc.
-- 🧪 **Ingredient & Additive Detection** — identifies preservatives and artificial additives
-- 📊 **Nutrition Breakdown** — calories, sugar, sodium, fat, saturated fat, trans fat, protein, carbs, fiber
-- 🎨 **Premium UI** — 3D ambient backgrounds, smooth Framer Motion animations, glassmorphism cards
-- 📱 **Fully Responsive** — works seamlessly on mobile, tablet, and desktop
+- 📸 **Image Scan Mode** : upload a food package photo; OCR extracts all data automatically
+- ✍️ **Manual Entry Mode** : enter nutrition values directly for instant analysis
+- 🤖 **AI Health Analysis**: powered by Google Gemini for deep nutritional insights
+- ⭐ **General Rating** : universal health score for the product
+- 👤 **Personalised Rating**: adjusted for your age and medical conditions
+- ⚠️ **Risk Tags & Warnings**: visual flags for high sugar, sodium, trans fat, etc.
+- 🧪 **Ingredient & Additive Detection** : identifies preservatives and artificial additives
+- 📊 **Nutrition Breakdown** : calories, sugar, sodium, fat, saturated fat, trans fat, protein, carbs, fiber
+- 🎨 **Premium UI** : 3D ambient backgrounds, smooth Framer Motion animations, glassmorphism cards
+- 📱 **Fully Responsive** : works seamlessly on mobile, tablet, and desktop
 
 ---
 
